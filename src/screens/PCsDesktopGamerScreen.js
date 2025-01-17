@@ -39,6 +39,11 @@ const PCsDesktopGamerScreen = ({ route }) => {
     navigation.navigate('Home');
   };
 
+  const handlePurchase = () => {
+    // Um alerta para o botão addToCart
+    alert("Produto adicionado ao carrinho!");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -59,7 +64,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
               <Text style={styles.itemInstallments}>{item.installments}</Text>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => addToCart(item)}
+                onPress={() => {addToCart(item);handlePurchase()}}
               >
                 <Text style={styles.addButtonText}>Adicionar ao Carrinho</Text>
               </TouchableOpacity>

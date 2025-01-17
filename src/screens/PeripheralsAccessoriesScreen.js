@@ -39,6 +39,11 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
     navigation.navigate('Home');
   };
 
+  const handlePurchase = () => {
+    // Um alert para o botão addToCart
+    alert('Produto adicionado ao carrinho!');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
