@@ -11,7 +11,7 @@ const HardwareProductsScreen = ({ route }) => {
   const products = [
     { id: '1', name: 'Placa Mãe Asus PRIME B550M-A', price: 'R$ 700,00', discountPrice: 'R$ 650,00', installments: 'R$ 108,33 em até 6x', image: 'https://www.dropbox.com/scl/fi/mcr3x3p0oqregwqkivg66/61T-vIM-N5L._AC_SX679_.jpg?rlkey=k3znonpogfjg8qr4q75aryuu0&st=bwwkyymj&dl=1', }, 
     { id: '2', name: 'Processador AMD Ryzen 9', price: 'R$ 3.500,00', discountPrice: 'R$ 3.200,00', installments: 'R$ 533,33 em até 6x', image: 'https://www.dropbox.com/scl/fi/6nfzg5b0oox2qwqfrhs5q/5116zdA9uyL.__AC_SX300_SY300_QL70_ML2_.jpg?rlkey=p8bswckj3z2sv0b7vz5wczegi&st=rd41i1rj&dl=1', }, 
-    { id: '3', name: 'Memória RAM Corsair 16GB', price: 'R$ 400,00', discountPrice: 'R$ 350,00', installments: 'R$ 58,33 em até 6x', image: 'https://via.placeholder.com/150', }, 
+    { id: '3', name: 'Memória RAM Corsair DDR4 16GB', price: 'R$ 400,00', discountPrice: 'R$ 350,00', installments: 'R$ 58,33 em até 6x', image: 'https://www.dropbox.com/scl/fi/iv6kas0h4qidpfi5d1lg6/51n6iSdBaRL._AC_SY879_.jpg?rlkey=3bt0d7byanidzgukmm5zpv53s&st=7jd2u425&dl=1', }, 
     { id: '4', name: 'Placa de Vídeo NVIDIA RTX 3080', price: 'R$ 8.000,00', discountPrice: 'R$ 7.500,00', installments: 'R$ 1.250,00 em até 6x', image: 'https://via.placeholder.com/150', }, 
     { id: '5', name: 'SSD Samsung 1TB', price: 'R$ 1.000,00', discountPrice: 'R$ 950,00', installments: 'R$ 158,33 em até 6x', image: 'https://via.placeholder.com/150', }, 
     { id: '6', name: 'Fonte Corsair 750W', price: 'R$ 650,00', discountPrice: 'R$ 600,00', installments: 'R$ 100,00 em até 6x', image: 'https://via.placeholder.com/150', }, 
