@@ -15,7 +15,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
       price: 'R$ 7.066,80',
       discountPrice: 'R$ 5.490,30',
       installments: 'R$ 6.459,18 em até 12x',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://www.dropbox.com/scl/fi/p72bs2py20ruh5mvknxos/pc-completo-pichau-far-cry-0034.jpg?rlkey=cnutw3l54525o9icxpit0cjnp&st=3reua7jw&dl=1',
     },
     {
       id: '2',
@@ -23,7 +23,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
       price: 'R$ 5.205,19',
       discountPrice: 'R$ 3.349,90',
       installments: 'R$ 3.941,16 em até 12x',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://www.dropbox.com/scl/fi/73dmcl5n9vrevs3bhogew/PC-Gamer-Pichau-Hefesto-IV.jpg?rlkey=iaxjb2nwwdhte7uaeuwov2w8f&st=jgdd2ziq&dl=1',
     },
     {
       id: '3',
@@ -31,7 +31,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
       price: 'R$ 4.999,99',
       discountPrice: 'R$ 3.999,99',
       installments: 'R$ 4.679,99 em até 12x',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://www.dropbox.com/scl/fi/5t7m5yra0dreg1vp4ao0l/Notebook-Gamer-ACer-Nitro-5.jpg?rlkey=zzta8dsflf35htewcp9cho8qa&st=d6h995rw&dl=1',
     },
   ];
 
@@ -56,7 +56,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
         data={products}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
+            <Image source={{ uri: item.image }} style={styles.itemImage} resizeMode="contain" />
             <View style={styles.itemDetails}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemPrice}>De {item.price}</Text>
@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     marginBottom: 5,
+    marginRight: 10,
+    marginLeft: 10,
     padding: 11,
     borderRadius: 10,
     shadowColor: '#000',
@@ -126,8 +128,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   itemImage: {
-    width: 80,
-    height: 80,
+    width: 160,
+    height: 160,
     borderRadius: 10,
   },
   itemDetails: {

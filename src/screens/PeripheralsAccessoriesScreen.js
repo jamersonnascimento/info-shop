@@ -15,7 +15,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
         price: 'R$ 422,52',
         discountPrice: 'R$ 299,90',
         installments: 'R$ 351,16 em até 12x',
-        image: 'https://via.placeholder.com/150',
+        image: 'https://www.dropbox.com/scl/fi/m2flo68c8uqtvwceg46t5/Mouse-Gamer-Redragon-King-Pro-4K.jpg?rlkey=r1haqhrgys45z0qtn8ewuyphk&st=nvlcvv1f&dl=1',
       },
       {
         id: '2',
@@ -23,7 +23,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
         price: 'R$ 299,99',
         discountPrice: 'R$ 199,99',
         installments: 'R$ 234,99 em até 12x',
-        image: 'https://via.placeholder.com/150',
+        image: 'https://www.dropbox.com/scl/fi/7ppoz0f64wc8uu27ju9h7/Teclado-Mec-nico-Redragon-Kumara-RGB.jpg?rlkey=fsfg9pqd0nabfrzz3bnoqpvq5&st=49z7np5c&dl=1',
       },
       {
         id: '3',
@@ -31,7 +31,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
         price: 'R$ 499,99',
         discountPrice: 'R$ 399,99',
         installments: 'R$ 467,99 em até 12x',
-        image: 'https://via.placeholder.com/150',
+        image: 'https://www.dropbox.com/scl/fi/bqird1fyklzpmxpfzpulf/Webcam-Logitech-C920.jpg?rlkey=22wlr2mpl86e243x4ri0if5ig&st=kcw39vyq&dl=1',
       },
   ];
 
@@ -56,7 +56,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
         data={products}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
+            <Image source={{ uri: item.image }} style={styles.itemImage} resizeMode="contain" />
             <View style={styles.itemDetails}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemPrice}>De {item.price}</Text>
@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     marginBottom: 5,
+    marginRight: 10,
+    marginLeft: 10,
     padding: 11,
     borderRadius: 10,
     shadowColor: '#000',
@@ -126,8 +128,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   itemImage: {
-    width: 80,
-    height: 80,
+    width: 160,
+    height: 160,
     borderRadius: 10,
   },
   itemDetails: {
@@ -179,5 +181,3 @@ const styles = StyleSheet.create({
 });
 
 export default PeripheralsAccessoriesScreen;
-
-
