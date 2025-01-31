@@ -22,7 +22,7 @@ React Native, JavaScript, Node.js, Express, PostgreSQL, HTML, CSS (aprendendo)
 
 Bem-vindo à documentação da aplicação mobile desenvolvida em React Native para a loja de informática. Esta aplicação tem como objetivo permitir aos clientes visualizar e comprar produtos diretamente pelo smartphone, além de gerenciar pedidos e acompanhar status de compras.
 
-Nossa aplicação foi projetada com foco na experiência do usuário, garantindo uma navegação fluida e intuitiva. A aplicação ainda está em desenvolvimento, portanto, existem várias implementações para serem implementadas. A aplicação ainda não está usando API para o banco de dados, usando apenas o banco local diretamente pelo React-Native. 
+Nossa aplicação foi projetada com foco na experiência do usuário, garantindo uma navegação fluida e intuitiva. A aplicação ainda está em desenvolvimento, portanto, existem várias funcionalidades para serem implementadas. A aplicação ainda não está usando API para o banco de dados, usando apenas o banco local diretamente pelo React-Native. 
 
 # 3. O que preciso para usar a aplicação?
 
