@@ -10,7 +10,7 @@ const CartItem = ({ item, onRemove, onUpdateQuantity }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <Image source={{ uri: item.image }} style={styles.image} resizeMode='contain'/>
       <View style={styles.details}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.price}>De {formatValue(parseFloat(item.price.replace('R$', '').replace('.', '').replace(',', '.')))}</Text>
