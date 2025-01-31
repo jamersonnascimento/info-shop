@@ -79,7 +79,7 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
     "metro-react-native-babel-preset": "^0.77.0"
   }}
 
-  # 6. Instalação e Configuração
+# 6. Instalação e Configuração
 
 **Pré-requisitos**
 
