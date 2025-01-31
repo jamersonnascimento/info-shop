@@ -48,7 +48,8 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
 
 - **Dependências:**
   - *Aqui estão as dependências utilizadas no projeto, conforme especificado no arquivo package.json:*
-  ```{
+  ```
+  {
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
     "@react-native-async-storage/async-storage": "^1.23.1",
@@ -76,7 +77,8 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
     "babel-preset-expo": "^12.0.4",
     "metro-react-native-babel-preset": "^0.77.0"
   }
-}```
+}
+```
  
 # 4. Estrutura de Pastas do Projeto
 ```
