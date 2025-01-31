@@ -79,7 +79,7 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
     "metro-react-native-babel-preset": "^0.77.0"
   }}
 
-# 6. Instalação e Configuração
+# 4. Instalação e Configuração
 
 **Pré-requisitos**
 
@@ -136,7 +136,7 @@ Pronto! Agora o projeto está instalado e configurado em seu ambiente local e pr
 
 
  
-# 4. Estrutura de Pastas do Projeto
+# 5. Estrutura de Pastas do Projeto
 ```
 Info-Shop/ [pasta raíz]
 ├── .expo/
@@ -182,7 +182,7 @@ Info-Shop/ [pasta raíz]
 
 
 ```
- # 5. Tecnologias Utilizadas
+ # 6. Tecnologias Utilizadas
 
 1. **React Native**: Framework para desenvolvimento de aplicativos móveis multiplataforma (Android e iOS).
 
@@ -235,7 +235,7 @@ Essas são as principais tecnologias e ferramentas utilizadas no projeto. É imp
 
 
 
-# 6. Funcionalidades
+# 7. Funcionalidades
 
 1. **Tela Inicial** (HomeScreen)
 Exibição de Produtos em Destaque: Mostra uma lista de produtos em destaque para o usuário.
@@ -284,7 +284,7 @@ api.js: Arquivo para configurar chamadas de API (atualmente vazio. No futuro, a 
 colors.js: Arquivo para definir cores e estilos (atualmente vazio).
 Essas funcionalidades fornecem uma base sólida para o aplicativo InfoShop, permitindo aos usuários navegar, pesquisar, adicionar produtos ao carrinho, gerenciar favoritos e acessar informações da conta e atendimento ao cliente.
 
-# 7. Contribuição
+# 8. Contribuição
 
 O seu interesse em contribuir para o projeto é muito bem-vindo. Siga as diretrizes abaixo para abrir problemas (issues) ou enviar solicitações de pull (pull requests):
 
@@ -336,7 +336,7 @@ Lembre-se de que é importante seguir as diretrizes de contribuição específic
 
 Obrigado por considerar a contribuição para o projeto! Suas contribuições ajudam a melhorar a qualidade do software e beneficiam toda a comunidade de desenvolvedores.
 
-# 8. Licença
+# 9. Licença
 
  **Licença MIT:**:
    - Permite que qualquer pessoa utilize, modifique e distribua o código, mesmo em projetos comerciais, desde que inclua o aviso de licença no software resultante. Esta é uma licença permissiva.
@@ -344,11 +344,11 @@ Obrigado por considerar a contribuição para o projeto! Suas contribuições aj
    
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
-# 9. Contato
+# 10. Contato
 
 Se você tiver algum feedback, por favor nos deixe saber por meio de jameswebbinformatica@gmail.com
 
-# 10. Agradecimentos
+# 11. Agradecimentos
 
 Gostaríamos de expressar nossa sincera gratidão a todas as pessoas que contribuíram e apoiaram este projeto ao longo do tempo. Suas ideias, feedback, e esforços foram inestimáveis para o sucesso deste empreendimento. Queremos fazer menção especial ao professor João, cuja orientação e assistência foram fundamentais para a criação desta aplicação.
 
