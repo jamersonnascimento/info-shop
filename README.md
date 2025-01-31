@@ -76,9 +76,8 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
     "@babel/plugin-transform-private-methods": "^7.25.9",
     "babel-preset-expo": "^12.0.4",
     "metro-react-native-babel-preset": "^0.77.0"
-  }
-}
-```
+  }}
+
  
 # 4. Estrutura de Pastas do Projeto
 ```
