@@ -79,6 +79,62 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
     "metro-react-native-babel-preset": "^0.77.0"
   }}
 
+  # 6. Instalação e Configuração
+
+**Pré-requisitos**
+
+Antes de começar, certifique-se de ter o Node.js e o npm (Node Package Manager) instalados em seu sistema. Você pode baixá-los em nodejs.org.
+A seguir, você encontrará instruções detalhadas sobre como instalar e configurar o projeto em um ambiente local.
+
+1. **Clone o repositório:**
+
+    Primeiramente, clone o repositório do projeto para sua máquina local usando o seguinte comando do Git:
+
+    ```
+    git clone https://github.com/jamersonnascimento/info-shop.git
+    ```
+
+2. **Acesse a pasta do projeto:**
+
+    Entre na pasta do projeto utilizando o comando:
+
+    ```
+    cd info-shop
+    ```
+
+    Obs.: Lembre-se que você poderá escolher qualquer caminho de diretório, bem como qualquer nome!
+
+3. **Instale as dependências:**
+
+    Utilize o Node.js e o npm (gerenciador de pacotes do Node.js) para instalar as dependências necessárias do projeto. Rode o seguinte comando na pasta raiz do projeto:
+
+    ```
+    npm install
+    ```
+
+4. **Configuração do AsyncStorage:**
+
+    O projeto utiliza AsyncStorage para armazenamento local de dados. Para instalar e configurar o AsyncStorage, execute:
+
+5. **Inicie a aplicação:**
+
+    Com todas as dependências instaladas e o banco de dados configurado, você pode iniciar a aplicação com o seguinte comando:
+
+    ```
+    npx expo start
+    ```
+    Fique esperto! Note a sintaxe do script dentro de `package.json`:
+    ```
+    "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+    },
+    ```
+Pronto! Agora o projeto está instalado e configurado em seu ambiente local e pronto para ser usado.
+
+
  
 # 4. Estrutura de Pastas do Projeto
 ```
@@ -178,62 +234,8 @@ metro-react-native-babel-preset
 Essas são as principais tecnologias e ferramentas utilizadas no projeto. É importante lembrar que a escolha das tecnologias pode evoluir conforme o projeto avança e escala. Portanto, este documento deve ser atualizado regularmente, refletindo as preferências e necessidades da equipe de desenvolvimento.
 
 
-# 6. Instalação e Configuração
 
-**Pré-requisitos**
-
-Antes de começar, certifique-se de ter o Node.js e o npm (Node Package Manager) instalados em seu sistema. Você pode baixá-los em nodejs.org.
-A seguir, você encontrará instruções detalhadas sobre como instalar e configurar o projeto em um ambiente local.
-
-1. **Clone o repositório:**
-
-    Primeiramente, clone o repositório do projeto para sua máquina local usando o seguinte comando do Git:
-
-    ```
-    git clone https://github.com/jamersonnascimento/info-shop.git
-    ```
-
-2. **Acesse a pasta do projeto:**
-
-    Entre na pasta do projeto utilizando o comando:
-
-    ```
-    cd info-shop
-    ```
-
-    Obs.: Lembre-se que você poderá escolher qualquer caminho de diretório, bem como qualquer nome!
-
-3. **Instale as dependências:**
-
-    Utilize o Node.js e o npm (gerenciador de pacotes do Node.js) para instalar as dependências necessárias do projeto. Rode o seguinte comando na pasta raiz do projeto:
-
-    ```
-    npm install
-    ```
-
-4. **Configuração do AsyncStorage:**
-
-    O projeto utiliza AsyncStorage para armazenamento local de dados. Para instalar e configurar o AsyncStorage, execute:
-
-5. **Inicie a aplicação:**
-
-    Com todas as dependências instaladas e o banco de dados configurado, você pode iniciar a aplicação com o seguinte comando:
-
-    ```
-    npx expo start
-    ```
-    Fique esperto! Note a sintaxe do script dentro de `package.json`:
-    ```
-    "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-    },
-    ```
-Pronto! Agora o projeto está instalado e configurado em seu ambiente local e pronto para ser usado.
-
-# 7. Funcionalidades
+# 6. Funcionalidades
 
 1. **Tela Inicial** (HomeScreen)
 Exibição de Produtos em Destaque: Mostra uma lista de produtos em destaque para o usuário.
@@ -282,7 +284,7 @@ api.js: Arquivo para configurar chamadas de API (atualmente vazio. No futuro, a 
 colors.js: Arquivo para definir cores e estilos (atualmente vazio).
 Essas funcionalidades fornecem uma base sólida para o aplicativo InfoShop, permitindo aos usuários navegar, pesquisar, adicionar produtos ao carrinho, gerenciar favoritos e acessar informações da conta e atendimento ao cliente.
 
-# 8. Contribuição
+# 7. Contribuição
 
 O seu interesse em contribuir para o projeto é muito bem-vindo. Siga as diretrizes abaixo para abrir problemas (issues) ou enviar solicitações de pull (pull requests):
 
@@ -334,7 +336,7 @@ Lembre-se de que é importante seguir as diretrizes de contribuição específic
 
 Obrigado por considerar a contribuição para o projeto! Suas contribuições ajudam a melhorar a qualidade do software e beneficiam toda a comunidade de desenvolvedores.
 
-# 9. Licença
+# 8. Licença
 
  **Licença MIT:**:
    - Permite que qualquer pessoa utilize, modifique e distribua o código, mesmo em projetos comerciais, desde que inclua o aviso de licença no software resultante. Esta é uma licença permissiva.
@@ -342,11 +344,11 @@ Obrigado por considerar a contribuição para o projeto! Suas contribuições aj
    
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
-# 10. Contato
+# 9. Contato
 
 Se você tiver algum feedback, por favor nos deixe saber por meio de jameswebbinformatica@gmail.com
 
-# 11. Agradecimentos
+# 10. Agradecimentos
 
 Gostaríamos de expressar nossa sincera gratidão a todas as pessoas que contribuíram e apoiaram este projeto ao longo do tempo. Suas ideias, feedback, e esforços foram inestimáveis para o sucesso deste empreendimento. Queremos fazer menção especial ao professor João, cuja orientação e assistência foram fundamentais para a criação desta aplicação.
 
