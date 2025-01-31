@@ -179,7 +179,7 @@ Essas são as principais tecnologias e ferramentas utilizadas no projeto. É imp
 
 # 6. Instalação e Configuração
 
-*Pré-requisitos*
+**Pré-requisitos**
 Antes de começar, certifique-se de ter o Node.js e o npm (Node Package Manager) instalados em seu sistema. Você pode baixá-los em nodejs.org.
 A seguir, você encontrará instruções detalhadas sobre como instalar e configurar o projeto em um ambiente local.
 
