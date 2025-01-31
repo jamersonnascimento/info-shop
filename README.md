@@ -112,14 +112,20 @@ A seguir, você encontrará instruções detalhadas sobre como instalar e config
     npm install
     ```
 
-4. **O Expo CLI facilita o processo de criação e gerenciamento de projetos React Native.
-- Execute o comando abaixo para instalar o Expo CLI globalmente:**npm install -g expo-cli
+4. **Instale o Expo CLI**
+  Execute o comando abaixo para instalar o Expo CLI globalmente:
+```
+npm install -g expo-cli
+```
 
-5. **Configuração do AsyncStorage:**
+6. **Configuração do AsyncStorage:**
+ O projeto utiliza AsyncStorage para armazenamento local de dados. Para instalar e configurar o AsyncStorage, execute:
 
-    O projeto utiliza AsyncStorage para armazenamento local de dados. Para instalar e configurar o AsyncStorage, execute:
+ ```
+   npm install @react-native-async-storage/async-storage
+   ```
 
-6. **Inicie a aplicação:**
+8. **Inicie a aplicação:**
 
     Com todas as dependências instaladas e o banco de dados configurado, você pode iniciar a aplicação com o seguinte comando:
 
