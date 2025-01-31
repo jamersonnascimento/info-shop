@@ -41,6 +41,7 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
   - Windows, macOS ou Linux
 - *Ferramenta de Desenvolvimento:*
   - Node.js (versão 16+)
+  - Git (versão 2.4+)
   - React Native CLI ou Expo CLI
   - Emuladores Android/iOS ou dispositivos físico
 
