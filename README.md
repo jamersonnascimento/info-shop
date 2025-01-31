@@ -82,46 +82,47 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
 # 4. Estrutura de Pastas do Projeto
 ```
 Info-Shop/ [pasta raíz]
-├── .expo/  #Arquivos de configuração gerados pelo Expo
-├── .gitignore  #Arquivo para especificar quais arquivos e pastas devem ser ignorados pelo Git
-├── App.js  #Arquivo principal do aplicativo, ponto de entrada
-├── app.json  #Arquivo de configuração do aplicativo Expo
-├── assets/  #Pasta para armazenar arquivos de mídia como imagens, fontes, etc
-├── babel.config.js  #Arquivo de configuração do Babel para transpilar código JavaScript moderno
-├── LICENCE  #Arquivo contendo a licença do projeto
-├── package.json  #Arquivo de gerenciamento de dependências e scripts do npm
-├── README.md  #Documento de explicação e instruções do projeto
+├── .expo/
+├── .gitignore
+├── App.js
+├── app.json
+├── assets/
+├── babel.config.js
+├── LICENCE
+├── package.json
+├── README.md
 ├── src/
 │       ├── assets  
-│       │ ├── images/  #Pasta para armazenar imagens utilizadas no projeto
+│       │ ├── images/
 │       ├── components
-│       │ ├── BottomNavigation.js  #Componente de navegação inferior do aplicativo
-│       │ ├── CartItem.js  #Componente para exibir um item no carrinho de compras
-│       │ ├── CategoryItem.js  #Componente para exibir uma categoria de produtos
-│       │ ├── EmptyCartMessage.js  #Componente para exibir uma mensagem quando o carrinho está vazio
-│       │ ├── EmptyFavoritesMessage.js  #Componente para exibir uma mensagem quando os favoritos estão vazios
-│       │ ├── LoginForm.js  #Componente para o formulário de login
-│       │ ├── ProductItem.js  #Componente para exibir um produto individual
-│       │ ├── SearchBar.js  #Componente da barra de pesquisa
+│       │ ├── BottomNavigation.js
+│       │ ├── CartItem.js
+│       │ ├── CategoryItem.js
+│       │ ├── EmptyCartMessage.js
+│       │ ├── EmptyFavoritesMessage.js
+│       │ ├── LoginForm.js
+│       │ ├── ProductItem.js
+│       │ ├── SearchBar.js
 │       ├── context/
-│       │ ├── CartContext.js  #Contexto do React para gerenciar o estado do carrinho de compras
+│       │ ├── CartContext.js
 │       ├── navigation/
-│       │ ├── AppNavigator.js  #Arquivo de navegação principal para definir as rotas do aplicativo
-│       ├──screens/
-│       │ ├── AccountScreen.js  #Tela da conta do usuário
-│       │ ├── CartScreen.js  #Tela do carrinho de compras
-│       │ ├── CategoriesScreen.js  #Tela de categorias de produtos
-│       │ ├── CustomerServiceScreen.js  #Tela de serviço ao cliente
-│       │ ├── FavoritesScreen.sj  #Tela de produtos favoritos
-│       │ ├── HardwareProductsScreen.js  #Tela de produtos de hardware
-│       │ ├── HomeScreen.js  #Tela inicial do aplicativo
-│       │ ├── OrderSummaryScreen.js  #Tela de resumo do pedido
-│       │ ├── PCsDesktopGamerScreen.js  #Tela de PCs desktop gamers
-│       │ ├── PeripheralsACcessoriesScreen.js  #Tela de periféricos e acessórios
+│       │ ├── AppNavigator.js
+│       ├── screens/
+│       │ ├── AccountScreen.js
+│       │ ├── CartScreen.js
+│       │ ├── CategoriesScreen.js
+│       │ ├── CustomerServiceScreen.js
+│       │ ├── FavoritesScreen.sj
+│       │ ├── HardwareProductsScreen.js
+│       │ ├── HomeScreen.js
+│       │ ├── OrderSummaryScreen.js
+│       │ ├── PCsDesktopGamerScreen.js
+│       │ ├── PeripheralsAccessoriesScreen.js
 │       ├── services/
-│       │ ├──  api.js  #Arquivo para chamadas de API e serviços de backend (será implementado depois!)
+│       │ ├── api.js
 │       ├── styles/
-│       │ ├── colors.js  #Arquivo de configuração das cores utilizadas no aplicativo (para ser usado no futuro)
+│       │ ├── colors.js
+
 
 ```
  # 5. Tecnologias Utilizadas
