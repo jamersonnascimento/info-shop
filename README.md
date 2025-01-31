@@ -48,6 +48,7 @@ Nossa aplicação foi projetada com foco na experiência do usuário, garantindo
 
 - **Dependências:**
   - *Aqui estão as dependências utilizadas no projeto, conforme especificado no arquivo package.json:*
+  
   {
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
