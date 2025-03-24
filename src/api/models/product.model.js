@@ -1,3 +1,4 @@
+//teste para github
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 
