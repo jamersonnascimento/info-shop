@@ -1,5 +1,6 @@
 const db = require('../models');
 const Product = db.Product;
+const Category = db.Category;
 const { Op } = require('sequelize');
 
 // Constantes para definir ordem dos atributos
@@ -214,6 +215,115 @@ exports.delete = async (req, res) => {
   } catch (error) {
     res.status(500).json({ 
       message: 'Erro ao excluir o produto.', 
+      error: error.message 
+    });
+  }
+};
+
+// Adicionar categoria a um produto
+exports.addCategory = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const { categoryId } = req.body;
+
+    if (!categoryId) {
+      return res.status(400).json({ message: 'ID da categoria é obrigatório' });
+    }
+
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Produto não encontrado' });
+    }
+
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: 'Categoria não encontrada' });
+    }
+
+    await product.addCategory(category);
+
+    res.status(200).json({
+      message: 'Categoria adicionada ao produto com sucesso!'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Erro ao adicionar categoria ao produto.', 
+      error: error.message 
+    });
+  }
+};
+
+// Remover categoria de um produto
+exports.removeCategory = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const categoryId = req.params.categoryId;
+
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Produto não encontrado' });
+    }
+
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: 'Categoria não encontrada' });
+    }
+
+    await product.removeCategory(category);
+
+    res.status(200).json({
+      message: 'Categoria removida do produto com sucesso!'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Erro ao remover categoria do produto.', 
+      error: error.message 
+    });
+  }
+};
+
+// Listar categorias de um produto
+exports.findCategories = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const { 
+      page = 1, 
+      limit = 10
+    } = req.query;
+
+    const offset = (page - 1) * limit;
+
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Produto não encontrado' });
+    }
+
+    // Busca categorias associadas ao produto com paginação
+    const categories = await product.getCategories({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      joinTableAttributes: [], // Não retorna atributos da tabela de junção
+      attributes: [
+        'id_categoria',
+        'nome',
+        'descricao',
+        'criado_em',
+        'atualizado_em'
+      ]
+    });
+
+    // Conta o total de categorias associadas ao produto (sem paginação)
+    const count = await product.countCategories();
+
+    res.status(200).json({
+      total: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: parseInt(page),
+      categories: categories
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Erro ao buscar categorias do produto.', 
       error: error.message 
     });
   }

@@ -97,9 +97,10 @@ exports.create = async (req, res) => {
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
+    const { includeItems } = req.query;
 
-    const cart = await Cart.findByPk(id, {
-      include: [{
+    const includes = [
+      {
         model: Client,
         as: 'clientInfo',
         attributes: CLIENT_ATTRIBUTES,
@@ -108,7 +109,24 @@ exports.findOne = async (req, res) => {
           as: 'personInfo',
           attributes: PERSON_ATTRIBUTES
         }]
-      }]
+      }
+    ];
+
+    // Incluir itens do carrinho se solicitado
+    if (includeItems === 'true') {
+      includes.push({
+        model: db.CartItem,
+        as: 'items',
+        include: [{
+          model: db.Product,
+          as: 'product',
+          attributes: ['id_produto', 'nome', 'descricao', 'preco', 'estoque']
+        }]
+      });
+    }
+
+    const cart = await Cart.findByPk(id, {
+      include: includes
     });
 
     if (!cart) {
@@ -117,7 +135,10 @@ exports.findOne = async (req, res) => {
       });
     }
 
-    res.status(200).json(cart);
+    res.status(200).json({
+      message: 'Carrinho encontrado com sucesso!',
+      data: cart
+    });
   } catch (error) {
     res.status(500).json({ 
       message: 'Erro ao buscar o carrinho.', 

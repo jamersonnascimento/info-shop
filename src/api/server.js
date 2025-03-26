@@ -8,20 +8,30 @@ const app = express();
 
 // Configurações do CORS
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:8080',
   optionsSuccessStatus: 200
 };
 
 // Middlewares
 app.use(cors(corsOptions));
 
-// Custom middleware to skip JSON parsing for GET requests
+// Apply JSON parsing middleware for all requests except GET and DELETE
 app.use((req, res, next) => {
-  if (req.method === 'GET') {
+  if (req.method === 'GET' || req.method === 'DELETE') {
     return next();
   }
   express.json()(req, res, next);
 });
+
+// Ensure all DELETE requests can be processed properly
+app.use((req, res, next) => {
+  if (req.method === 'DELETE') {
+    // For all DELETE requests, ensure body is initialized
+    req.body = req.body || {};
+  }
+  next();
+});
+
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,6 +50,10 @@ require('./routes/person.routes')(app);
 require('./routes/address.routes')(app);
 require('./routes/cart.routes')(app);
 require('./routes/product.routes')(app);
+require('./routes/cartItem.routes')(app);
+require('./routes/category.routes')(app);
+require('./routes/order.routes')(app);
+require('./routes/orderItem.routes')(app);
 
 // Configurações
 const PORT = process.env.API_PORT || 8080;
