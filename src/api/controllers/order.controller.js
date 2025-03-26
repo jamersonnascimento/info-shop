@@ -83,23 +83,10 @@ exports.create = async (req, res) => {
       total: 0.00
     });
 
-    // Busca o pedido criado com todas as relações
-    const createdOrder = await Order.findByPk(order.id_pedido, {
-      include: [{
-        model: Client,
-        as: 'clientInfo',
-        attributes: CLIENT_ATTRIBUTES,
-        include: [{
-          model: Person,
-          as: 'personInfo',
-          attributes: PERSON_ATTRIBUTES
-        }]
-      }]
-    });
-
+    // Retorna apenas o pedido criado sem incluir relações
     res.status(201).json({
       message: 'Pedido criado com sucesso!',
-      data: createdOrder
+      data: order
     });
   } catch (error) {
     res.status(500).json({ 
@@ -211,28 +198,16 @@ exports.createFromCart = async (req, res) => {
 
     // Busca o pedido criado com todas as relações
     const createdOrder = await Order.findByPk(order.id_pedido, {
-      include: [
-        {
-          model: Client,
-          as: 'clientInfo',
-          attributes: CLIENT_ATTRIBUTES,
-          include: [{
-            model: Person,
-            as: 'personInfo',
-            attributes: PERSON_ATTRIBUTES
-          }]
-        },
-        {
-          model: OrderItem,
-          as: 'items',
-          attributes: ORDERITEM_ATTRIBUTES,
-          include: [{
-            model: Product,
-            as: 'product',
-            attributes: PRODUCT_ATTRIBUTES
-          }]
-        }
-      ]
+      include: [{
+        model: Client,
+        as: 'client',  // Alterado de 'clientInfo' para 'client'
+        attributes: CLIENT_ATTRIBUTES,
+        include: [{
+          model: Person,
+          as: 'personInfo',
+          attributes: PERSON_ATTRIBUTES
+        }]
+      }]
     });
 
     res.status(201).json({
@@ -260,7 +235,7 @@ exports.findOne = async (req, res) => {
       include: [
         {
           model: Client,
-          as: 'clientInfo',
+          as: 'client', // Alterado de 'clientInfo' para 'client'
           attributes: CLIENT_ATTRIBUTES,
           include: [{
             model: Person,
@@ -319,7 +294,7 @@ exports.findAll = async (req, res) => {
       distinct: true,
       include: [{
         model: Client,
-        as: 'clientInfo',
+        as: 'client', // Alterado de 'clientInfo' para 'client'
         attributes: CLIENT_ATTRIBUTES,
         include: [{
           model: Person,
@@ -471,7 +446,7 @@ exports.updateStatus = async (req, res) => {
       include: [
         {
           model: Client,
-          as: 'clientInfo',
+          as: 'client', // Alterado de 'clientInfo' para 'client'
           attributes: CLIENT_ATTRIBUTES,
           include: [{
             model: Person,
