@@ -235,7 +235,7 @@ exports.findOne = async (req, res) => {
       include: [
         {
           model: Client,
-          as: 'client', // Alterado de 'clientInfo' para 'client'
+          as: 'client',
           attributes: CLIENT_ATTRIBUTES,
           include: [{
             model: Person,
@@ -245,7 +245,7 @@ exports.findOne = async (req, res) => {
         },
         {
           model: OrderItem,
-          as: 'items',
+          as: 'orderItems', // Changed from 'items' to 'orderItems'
           attributes: ORDERITEM_ATTRIBUTES,
           include: [{
             model: Product,
@@ -314,8 +314,8 @@ exports.findAll = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ 
-      message: 'Erro ao listar os pedidos.', 
-      error: error.message 
+      message: 'Erro ao listar os pedidos.',
+      error: error.message
     });
   }
 };
@@ -340,7 +340,7 @@ exports.findAllByClient = async (req, res) => {
       distinct: true,
       include: [{
         model: OrderItem,
-        as: 'items',
+        as: 'orderItems', // Change from 'items' to 'orderItems' to match the association
         attributes: ORDERITEM_ATTRIBUTES,
         include: [{
           model: Product,
@@ -389,8 +389,8 @@ exports.updateStatus = async (req, res) => {
 
     // Validar transições de status permitidas
     const validTransitions = {
-      'pendente': ['em processamento', 'cancelado'],
-      'em processamento': ['enviado', 'cancelado'],
+      'pendente': ['em_processamento', 'cancelado'],
+      'em_processamento': ['enviado', 'cancelado'],
       'enviado': ['entregue', 'cancelado'],
       'entregue': [],
       'cancelado': []
@@ -446,7 +446,7 @@ exports.updateStatus = async (req, res) => {
       include: [
         {
           model: Client,
-          as: 'client', // Alterado de 'clientInfo' para 'client'
+          as: 'client',
           attributes: CLIENT_ATTRIBUTES,
           include: [{
             model: Person,
@@ -456,7 +456,7 @@ exports.updateStatus = async (req, res) => {
         },
         {
           model: OrderItem,
-          as: 'items',
+          as: 'orderItems', // Changed from 'items' to 'orderItems'
           attributes: ORDERITEM_ATTRIBUTES,
           include: [{
             model: Product,
