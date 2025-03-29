@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "Payment API Tests",
+    "description": "Coleção de testes para a API de Pagamentos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Criar Pagamento - Cartão de Crédito",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/payments",
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "id_pedido": 1,
+            "valor": 1299.99,
+            "metodo": "cartao_credito",
+            "status": "pendente"
+          }
+        }
+      }
+    },
+    {
+      "name": "Criar Pagamento - PIX",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/payments",
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "id_pedido": 2,
+            "valor": 799.50,
+            "metodo": "pix",
+            "status": "pendente"
+          }
+        }
+      }
+    },
+    {
+      "name": "Criar Pagamento - Boleto",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/payments",
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "id_pedido": 3,
+            "valor": 2499.99,
+            "metodo": "boleto",
+            "status": "pendente"
+          }
+        }
+      }
+    },
+    {
+      "name": "Atualizar Status do Pagamento",
+      "request": {
+        "method": "PATCH",
+        "url": "{{base_url}}/api/payments/1",
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "status": "aprovado"
+          }
+        }
+      }
+    },
+    {
+      "name": "Buscar Pagamento por ID",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/payments/1"
+      }
+    },
+    {
+      "name": "Listar Pagamentos por Status",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/payments?status=aprovado"
+      }
+    },
+    {
+      "name": "Listar Pagamentos por Método",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/payments?metodo=pix"
+      }
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+// payment.routes.js
 module.exports = app => {
   const paymentController = require('../controllers/payment.controller');
   const router = require('express').Router();

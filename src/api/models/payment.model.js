@@ -1,3 +1,4 @@
+//payment.model.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Order = require('./order.model');

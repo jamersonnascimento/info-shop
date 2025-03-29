@@ -1,3 +1,4 @@
+// payment.controller.js
 const db = require('../models');
 const Payment = db.Payment;
 const Order = db.Order;
