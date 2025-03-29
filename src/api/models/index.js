@@ -11,6 +11,7 @@ const CartItem = require('./cartItem.model');
 const Category = require('./category.model');
 const Order = require('./order.model');
 const OrderItem = require('./orderItem.model');
+const Payment = require('./payment.model');
 
 const db = {};
 
@@ -28,6 +29,7 @@ db.CartItem = CartItem;
 db.Category = Category;
 db.Order = Order;
 db.OrderItem = OrderItem;
+db.Payment = Payment;
 
 // Relacionamentos Person-Client (1:1)
 db.Person.hasOne(db.Client, {
@@ -230,6 +232,37 @@ db.OrderItem.belongsTo(db.Order, {
   foreignKey: {
     name: 'id_pedido',
     allowNull: false,
+    validate: {
+      notNull: { msg: 'ID do pedido é obrigatório' },
+      isInt: { msg: 'ID do pedido deve ser um número inteiro' }
+    }
+  },
+  as: 'order',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+// Relacionamentos Order-Payment (1:1)
+db.Order.hasOne(db.Payment, {
+  foreignKey: {
+    name: 'id_pedido',
+    allowNull: false,
+    unique: true,
+    validate: {
+      notNull: { msg: 'ID do pedido é obrigatório' },
+      isInt: { msg: 'ID do pedido deve ser um número inteiro' }
+    }
+  },
+  as: 'payment',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+db.Payment.belongsTo(db.Order, {
+  foreignKey: {
+    name: 'id_pedido',
+    allowNull: false,
+    unique: true,
     validate: {
       notNull: { msg: 'ID do pedido é obrigatório' },
       isInt: { msg: 'ID do pedido deve ser um número inteiro' }

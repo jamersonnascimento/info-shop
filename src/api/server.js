@@ -1,5 +1,4 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./models');
@@ -55,6 +54,7 @@ require('./routes/cartItem.routes')(app);
 require('./routes/category.routes')(app);
 require('./routes/order.routes')(app);
 require('./routes/orderItem.routes')(app);
+require('./routes/payment.routes')(app);
 
 // Configurações
 const PORT = process.env.API_PORT || 8080;
