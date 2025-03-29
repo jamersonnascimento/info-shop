@@ -198,10 +198,26 @@ exports.addProduct = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
+    // Verifica se o produto já está associado a alguma categoria
+    const existingCategories = await product.getCategories();
+    if (existingCategories && existingCategories.length > 0) {
+      return res.status(400).json({ 
+        message: 'Este produto já está associado a uma categoria',
+        currentCategory: {
+          id: existingCategories[0].id_categoria,
+          nome: existingCategories[0].nome
+        }
+      });
+    }
+
     await category.addProduct(product);
 
     res.status(200).json({
-      message: 'Produto adicionado à categoria com sucesso!'
+      message: 'Produto adicionado à categoria com sucesso!',
+      category: {
+        id: category.id_categoria,
+        nome: category.nome
+      }
     });
   } catch (error) {
     res.status(500).json({ 
@@ -230,7 +246,11 @@ exports.removeProduct = async (req, res) => {
     await category.removeProduct(product);
 
     res.status(200).json({
-      message: 'Produto removido da categoria com sucesso!'
+      message: 'Produto removido da categoria com sucesso!',
+      category: {
+        id: category.id_categoria,
+        nome: category.nome
+      }
     });
   } catch (error) {
     res.status(500).json({ 

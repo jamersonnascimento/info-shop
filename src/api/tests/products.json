@@ -1,0 +1,104 @@
+[
+  {
+    "nome": "Processador AMD Ryzen 7 5800X",
+    "descricao": "Processador AMD Ryzen 7 5800X, 8-Core, 16-Threads, 3.8GHz (4.7GHz Max Turbo), Cache 36MB, AM4, Sem Vídeo",
+    "preco": 1899.90,
+    "estoque": 15
+  },
+  {
+    "nome": "Placa de Vídeo RTX 3060 Ti",
+    "descricao": "Placa de Vídeo NVIDIA GeForce RTX 3060 Ti, 8GB GDDR6, Ray Tracing, DLSS, PCI-Express 4.0",
+    "preco": 2499.90,
+    "estoque": 8
+  },
+  {
+    "nome": "Memória RAM Corsair Vengeance",
+    "descricao": "Memória RAM Corsair Vengeance RGB Pro, 16GB (2x8GB), 3200MHz, DDR4, CL16",
+    "preco": 459.90,
+    "estoque": 30
+  },
+  {
+    "nome": "SSD Samsung 970 EVO Plus",
+    "descricao": "SSD Samsung 970 EVO Plus, 1TB, M.2 NVMe, Leitura 3500MB/s, Gravação 3300MB/s",
+    "preco": 799.90,
+    "estoque": 25
+  },
+  {
+    "nome": "Monitor Gamer LG UltraGear",
+    "descricao": "Monitor Gamer LG UltraGear 27\" IPS, Wide, 144 Hz, 2K QHD, 1ms, FreeSync Premium, HDR 10, 99% sRGB",
+    "preco": 2299.90,
+    "estoque": 12
+  },
+  {
+    "nome": "Teclado Mecânico Redragon Kumara",
+    "descricao": "Teclado Mecânico Redragon Kumara RGB, Switch Blue, ABNT2, Preto",
+    "preco": 289.90,
+    "estoque": 40
+  },
+  {
+    "nome": "Mouse Gamer Logitech G502",
+    "descricao": "Mouse Gamer Logitech G502 HERO, RGB Lightsync, 16000 DPI, 11 Botões, Ajuste de Peso",
+    "preco": 349.90,
+    "estoque": 35
+  },
+  {
+    "nome": "Headset Gamer HyperX Cloud Alpha",
+    "descricao": "Headset Gamer HyperX Cloud Alpha, Drivers Dual Chamber, Multi Plataforma, P2, Preto/Vermelho",
+    "preco": 599.90,
+    "estoque": 20
+  },
+  {
+    "nome": "Placa-Mãe ASUS ROG STRIX B550-F",
+    "descricao": "Placa-Mãe ASUS ROG STRIX B550-F GAMING, AMD AM4, ATX, DDR4",
+    "preco": 1599.90,
+    "estoque": 10
+  },
+  {
+    "nome": "Fonte de Alimentação Corsair RM750x",
+    "descricao": "Fonte de Alimentação Corsair RM750x, 750W, 80 Plus Gold, Modular",
+    "preco": 899.90,
+    "estoque": 18
+  },
+  {
+    "nome": "PC Gamer High-End Montado",
+    "descricao": "PC Gamer completo com Ryzen 9 5950X, RTX 4090, 64GB RAM, SSD 2TB NVMe, Water Cooler, Gabinete Premium",
+    "preco": 25999.90,
+    "estoque": 5
+  },
+  {
+    "nome": "PC Office Básico",
+    "descricao": "Computador para escritório com Intel i3 12100, 8GB RAM, SSD 256GB, Monitor 21.5\", Teclado e Mouse",
+    "preco": 2899.90,
+    "estoque": 25
+  },
+  {
+    "nome": "Licença Microsoft Windows 11 Pro",
+    "descricao": "Licença digital perpétua Windows 11 Pro 64 bits, ativação online",
+    "preco": 999.90,
+    "estoque": 50
+  },
+  {
+    "nome": "Microsoft Office 365 Business",
+    "descricao": "Assinatura anual Microsoft 365 Business com Word, Excel, PowerPoint, Teams e 1TB OneDrive",
+    "preco": 499.90,
+    "estoque": 100
+  },
+  {
+    "nome": "Impressora Multifuncional HP Smart Tank",
+    "descricao": "Impressora Multifuncional Tanque de Tinta, Wi-Fi, USB, Cópia, Digitalização, Impressão Frente e Verso",
+    "preco": 1299.90,
+    "estoque": 15
+  },
+  {
+    "nome": "Scanner Profissional Epson WorkForce",
+    "descricao": "Scanner de mesa com alimentador automático, digitalização duplex, 35ppm, resolução 600dpi",
+    "preco": 2499.90,
+    "estoque": 8
+  },
+  {
+    "nome": "No-Break APC 1500VA",
+    "descricao": "No-Break APC Back-UPS 1500VA, Bivolt, 8 tomadas, proteção contra surtos",
+    "preco": 899.90,
+    "estoque": 20
+  }
+]
