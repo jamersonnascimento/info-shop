@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 const { Sequelize } = require('sequelize');
 
 // Validação das variáveis de ambiente necessárias
