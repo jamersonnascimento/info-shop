@@ -5,6 +5,8 @@ import SearchBar from '../components/SearchBar';
 import ProductItem from '../components/ProductItem';
 import BottomNavigation from '../components/BottomNavigation';
 import api from '../services/api';
+import { productsData, getProductsByCategory } from '../data/products';
+import { getProductImage } from '../utils/productImageMapper';
 
 const ProductsScreen = ({ route }) => {
   const { categoryName, categoryId } = route.params;
@@ -22,23 +24,67 @@ const ProductsScreen = ({ route }) => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
+      // Função para formatar preços
+      const formatarPreco = (preco) => {
+        if (preco === undefined || preco === null) {
+          return {
+            original: 'Preço indisponível',
+            desconto: 'Preço indisponível',
+            parcelas: 'Preço indisponível'
+          };
+        }
+        
+        // Converter para número se for string
+        const precoNumerico = typeof preco === 'string' ? 
+          parseFloat(preco.replace(',', '.')) : 
+          Number(preco);
+          
+        if (isNaN(precoNumerico)) {
+          return {
+            original: 'Preço indisponível',
+            desconto: 'Preço indisponível',
+            parcelas: 'Preço indisponível'
+          };
+        }
+        
+        return {
+          original: `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`,
+          desconto: `R$ ${(precoNumerico * 0.9).toFixed(2).replace('.', ',')}`,
+          parcelas: `R$ ${(precoNumerico * 1.1).toFixed(2).replace('.', ',')} em até 12x`
+        };
+      };
+      
       const response = await api.get(`/categories/${categoryId}/products`);
-      const productsData = response.data.products.map(product => ({
-        id: product.id_produto.toString(),
-        name: product.nome,
-        description: product.descricao,
-        price: `R$ ${parseFloat(product.preco).toFixed(2).replace('.', ',')}`,
-        discountPrice: `R$ ${(parseFloat(product.preco) * 0.9).toFixed(2).replace('.', ',')}`,
-        installments: `R$ ${(parseFloat(product.preco) * 1.1).toFixed(2).replace('.', ',')} em até 12x`,
-        image: 'https://via.placeholder.com/150',
-        estoque: product.estoque
-      }));
+      const productsData = response.data.products.map(product => {
+        const productId = product.id_produto.toString();
+        // Formatar preços
+        const precos = formatarPreco(product.preco);
+        // Imagem padrão para produtos
+        const defaultImage = 'https://via.placeholder.com/150?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
+        
+        return {
+          id: productId,
+          name: product.nome || 'Produto sem nome',
+          description: product.descricao || 'Sem descrição disponível',
+          price: precos.original,
+          discountPrice: precos.desconto,
+          installments: precos.parcelas,
+          image: defaultImage,
+          imageUrl: defaultImage,
+          estoque: product.estoque || 0
+        };
+      });
       setProducts(productsData);
       setFilteredProducts(productsData);
       setError(null);
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
-      setError('Não foi possível carregar os produtos. Tente novamente mais tarde.');
+      setError('Não foi possível carregar os produtos da API. Usando dados locais.');
+      
+      // Usar os dados locais de produtos filtrados por categoria como fallback
+      const localProducts = getProductsByCategory(categoryName) || productsData;
+      setProducts(localProducts);
+      setFilteredProducts(localProducts);
     } finally {
       setLoading(false);
     }

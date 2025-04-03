@@ -1,13 +1,20 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useCallback, useMemo } from 'react';
 
-// Criação do contexto do carrinho
+/**
+ * Contexto para gerenciamento do carrinho de compras
+ * Fornece funções para adicionar, remover, atualizar e limpar itens do carrinho
+ */
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  // Estado para armazenar os itens do carrinho
   const [cartItems, setCartItems] = useState([]);
 
-  // Função para adicionar item ao carrinho
-  const addToCart = (item) => {
+  /**
+   * Adiciona um item ao carrinho ou atualiza sua quantidade se já existir
+   * @param {Object} item - O produto a ser adicionado ao carrinho
+   */
+  const addToCart = useCallback((item) => {
     // Verifica se o item já existe no carrinho
     const existingItemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
     
@@ -20,29 +27,53 @@ export const CartProvider = ({ children }) => {
       // Se o item não existe, adiciona ao carrinho
       // Garante que a quantidade seja pelo menos 1
       const quantity = item.quantity || 1;
-      setCartItems([...cartItems, { ...item, quantity }]);
+      setCartItems(prevItems => [...prevItems, { ...item, quantity }]);
     }
-  };
+  }, [cartItems]);
 
-  // Função para remover item do carrinho
-  const removeFromCart = (itemId) => {
-    setCartItems(cartItems.filter(item => item.id !== itemId));
-  };
+  /**
+   * Remove um item do carrinho pelo ID
+   * @param {string} itemId - ID do item a ser removido
+   */
+  const removeFromCart = useCallback((itemId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+  }, []);
 
-  // Função para atualizar a quantidade de um item no carrinho
-  const updateQuantity = (itemId, quantity) => {
-    setCartItems(cartItems.map(item =>
+  /**
+   * Atualiza a quantidade de um item no carrinho
+   * @param {string} itemId - ID do item a ser atualizado
+   * @param {number} quantity - Nova quantidade do item
+   */
+  const updateQuantity = useCallback((itemId, quantity) => {
+    setCartItems(prevItems => prevItems.map(item =>
       item.id === itemId ? { ...item, quantity } : item
     ));
-  };
+  }, []);
 
-  // Função para limpar o carrinho
-  const clearCart = () => {
+  /**
+   * Limpa todos os itens do carrinho
+   */
+  const clearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
+
+  // Calcula o total de itens no carrinho
+  const itemCount = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  }, [cartItems]);
+
+  // Valor do contexto com todas as funções e estados necessários
+  const contextValue = useMemo(() => ({
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    itemCount
+  }), [cartItems, addToCart, removeFromCart, updateQuantity, clearCart, itemCount]);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

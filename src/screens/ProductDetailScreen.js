@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
+import ProductImage from '../components/ProductImage';
 
 const ProductDetailScreen = ({ route }) => {
   const { product } = route.params;
@@ -66,10 +67,12 @@ const ProductDetailScreen = ({ route }) => {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.productImageContainer}>
-          <Image 
-            source={{ uri: product.image }} 
+          <ProductImage 
+            source={product.image || product.imageUrl} 
+            fallbackUrl={product.imageUrl} 
             style={styles.productImage} 
             resizeMode="contain"
+            productId={product.id} // Adicionando o ID do produto para buscar imagem local
           />
         </View>
 

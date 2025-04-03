@@ -1,10 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import ProductImage from './ProductImage';
 
 const ProductItem = ({ item }) => {
   return (
     <View style={styles.productItem}>
-      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <ProductImage 
+        source={item.image || item.imageUrl} 
+        fallbackUrl={item.imageUrl} 
+        style={styles.productImage} 
+        productId={item.id} // Adicionando o ID do produto para buscar imagem local
+      />
       <View>
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productPrice}>{item.price}</Text>

@@ -5,6 +5,8 @@ import SearchBar from '../components/SearchBar';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 import api from '../services/api';
+import ProductImage from '../components/ProductImage';
+import { productsData } from '../data/products';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -21,12 +23,9 @@ const HomeScreen = () => {
       setLoading(true);
       const response = await api.get('/products');
       
-      // Log para verificar a estrutura dos dados recebidos
-      console.log('Dados recebidos da API:', JSON.stringify(response.data.data[0]));
-      
       // Transformar os dados da API para o formato esperado pelo app
       const formattedProducts = response.data.data.map(product => {
-        // Verificar se o campo preco existe e é um número antes de usar toFixed
+        // Formatar preços
         let precoFormatado = 'Preço indisponível';
         let precoDesconto = 'Preço indisponível';
         let precoParcelas = 'Preço indisponível';
@@ -44,16 +43,21 @@ const HomeScreen = () => {
           }
         }
         
+        // Imagem padrão para produtos
+        const productImage = 'https://via.placeholder.com/500x500?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
+        const productId = product.id_produto.toString();
+        
         return {
-          id: product.id_produto.toString(),
-          name: product.nome,
+          id: productId,
+          name: product.nome || 'Produto sem nome',
           price: precoFormatado,
           discountPrice: precoDesconto,
           installments: precoParcelas,
-          // Usando uma imagem padrão ou descrição como imagem
-          image: 'https://www.dropbox.com/scl/fi/m2tvo222t3qumcr4uvcbj/Placa-de-V-deo-RTX-3070.jpg?rlkey=hgkvluhezodp7pfbn3jdndgqu&st=v32e85q2&dl=1',
-          category: 'Categoria Padrão', // Categoria padrão, pode ser ajustada se a API fornecer
-          description: product.descricao
+          image: productImage,
+          imageUrl: productImage,
+          category: product.categoria || 'Categoria Padrão',
+          description: product.descricao || 'Sem descrição disponível',
+          estoque: product.estoque || 0
         };
       });
       
@@ -63,13 +67,10 @@ const HomeScreen = () => {
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
       setError('Não foi possível carregar os produtos. Tente novamente mais tarde.');
-      // Manter os produtos de exemplo como fallback em caso de erro
-      const fallbackProducts = [
-        { id: '1', name: 'Headset Gamer HyperX Cloud III Wireless', price: 'R$ 999,99', discountPrice: 'R$ 699,99', installments: 'R$ 823,52 em até 12x', image: 'https://www.dropbox.com/scl/fi/6bis8e7628l1mi51wj5da/Headset-Gamer-Hyper-X-Cloud-III-Wireless.jpg?rlkey=mc1xf3ug53zs1kfqsd87jmvit&st=af2e1514&dl=1', category: 'Produtos para Gamers' },
-        { id: '2', name: 'PC Gamer Pichau Far Cry', price: 'R$ 7.066,80', discountPrice: 'R$ 5.490,30', installments: 'R$ 6.459,18 em até 12x', image: 'https://www.dropbox.com/scl/fi/p72bs2py20ruh5mvknxos/pc-completo-pichau-far-cry-0034.jpg?rlkey=cnutw3l54525o9icxpit0cjnp&st=6kird0xr&dl=1', category: 'PCs Desktop e Gamer' },
-      ];
-      setProducts(fallbackProducts);
-      setFilteredProducts(fallbackProducts);
+      // Usar os dados locais de produtos como fallback em caso de erro
+      console.log('Usando dados locais de produtos como fallback');
+      setProducts(productsData);
+      setFilteredProducts(productsData);
     } finally {
       setLoading(false);
     }
@@ -126,7 +127,11 @@ const HomeScreen = () => {
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleProductPress(item)}>
                 <View style={styles.card}>
-                  <Image source={{ uri: item.image }} style={styles.itemImage} />
+                  <ProductImage 
+                    source={item.image || item.imageUrl} 
+                    fallbackUrl={item.imageUrl} 
+                    style={styles.itemImage} 
+                  />
                   <View style={styles.itemDetails}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemPrice}>De {item.price}</Text>
