@@ -8,7 +8,20 @@ export const CartProvider = ({ children }) => {
 
   // Função para adicionar item ao carrinho
   const addToCart = (item) => {
-    setCartItems([...cartItems, { ...item, quantity: 1 }]);
+    // Verifica se o item já existe no carrinho
+    const existingItemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+    
+    if (existingItemIndex !== -1) {
+      // Se o item já existe, apenas atualiza a quantidade
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[existingItemIndex].quantity += (item.quantity || 1);
+      setCartItems(updatedCartItems);
+    } else {
+      // Se o item não existe, adiciona ao carrinho
+      // Garante que a quantidade seja pelo menos 1
+      const quantity = item.quantity || 1;
+      setCartItems([...cartItems, { ...item, quantity }]);
+    }
   };
 
   // Função para remover item do carrinho
