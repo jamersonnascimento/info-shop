@@ -83,7 +83,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',  // Fundo mais claro para melhor contraste com os cards
+    backgroundColor: '#F6ECDA',  // Fundo mais claro para melhor contraste com os cards
     padding: 0,
   },
   header: {

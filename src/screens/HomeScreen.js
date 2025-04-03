@@ -7,6 +7,7 @@ import { CartContext } from '../context/CartContext';
 import api from '../services/api';
 import ProductImage from '../components/ProductImage';
 import { productsData } from '../data/products';
+import { getProductImage } from '../utils/productImageMapper';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -24,6 +25,8 @@ const HomeScreen = () => {
       const response = await api.get('/products');
       
       // Transformar os dados da API para o formato esperado pelo app
+      const offerProductIds = ['1', '2', '3']; // IDs dos produtos que você quer colocar em oferta
+      
       const formattedProducts = response.data.data.map(product => {
         // Formatar preços
         let precoFormatado = 'Preço indisponível';
@@ -43,26 +46,28 @@ const HomeScreen = () => {
           }
         }
         
-        // Imagem padrão para produtos
-        const productImage = 'https://via.placeholder.com/500x500?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
-        const productId = product.id_produto.toString();
+        // Usar imagem local mapeada se disponível
+        const productImage = getProductImage(product.id_produto) || 'https://via.placeholder.com/500x500?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
+        
+        // Definir lógica para ofertas
+        const isOffer = offerProductIds.includes(product.id_produto.toString()); // Produtos com IDs específicos são ofertas
         
         return {
-          id: productId,
-          name: product.nome || 'Produto sem nome',
+          id: product.id_produto.toString(),
+          name: product.nome,
           price: precoFormatado,
           discountPrice: precoDesconto,
           installments: precoParcelas,
           image: productImage,
           imageUrl: productImage,
           category: product.categoria || 'Categoria Padrão',
-          description: product.descricao || 'Sem descrição disponível',
-          estoque: product.estoque || 0
+          description: product.descricao,
+          isOffer: isOffer // Adicionando propriedade isOffer
         };
       });
       
       setProducts(formattedProducts);
-      setFilteredProducts(formattedProducts);
+      setFilteredProducts(formattedProducts.filter(product => product.isOffer)); // Filtrar apenas ofertas
       setError(null);
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F6ECDA',
   },
   header: {
     flexDirection: 'row',

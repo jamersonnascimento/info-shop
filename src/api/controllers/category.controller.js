@@ -266,7 +266,7 @@ exports.findProducts = async (req, res) => {
     const categoryId = req.params.categoryId;
     const { 
       page = 1, 
-      limit = 10
+      limit = 1000 // Definir um limite alto para garantir que todos os produtos sejam retornados
     } = req.query;
 
     const offset = (page - 1) * limit;

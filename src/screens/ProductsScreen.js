@@ -132,6 +132,7 @@ const ProductsScreen = ({ route }) => {
             )}
             keyExtractor={item => item.id}
             ListEmptyComponent={<Text style={styles.noResults}>Nenhum produto encontrado.</Text>}
+            contentContainerStyle={styles.flatListContent}
           />
         )}
       </View>
@@ -143,8 +144,8 @@ const ProductsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#f0f0f0',
+    padding: 0,
+    backgroundColor: '#F6ECDA',
   },
   header: {
     flexDirection: 'row',
@@ -155,8 +156,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'contain',
-    marginRight: 1,
-    marginLeft: -20,
+    marginRight: -12,
+    marginLeft: -13,
     marginTop: 30,
   },
   title: {
@@ -170,8 +171,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 8,
     overflow: 'hidden',
-    maxHeight: 645,
-    backgroundColor: 'white',
+    maxHeight: 567,
+    backgroundColor: '#F6ECDA',
+    marginHorizontal: 3,
+    marginBottom: 60, // Adiciona margem inferior para evitar que o conteúdo fique atrás do BottomNavigation
   },
   noResults: {
     textAlign: 'center',
@@ -211,6 +214,11 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  flatListContent: {
+    paddingVertical: 10,
+    paddingBottom: 50, // Garante espaço suficiente na parte inferior para não ficar atrás do BottomNavigation
+    backgroundColor: '#F6ECDA', // Cor de fundo da FlatList
   },
 });
 
