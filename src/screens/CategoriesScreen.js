@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SearchBar from '../components/SearchBar';
 import CategoryItem from '../components/CategoryItem';
 import BottomNavigation from '../components/BottomNavigation';
+import api from '../services/api';
 
 const CategoriesScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [categories] = useState([
-    { id: '1', name: 'Peças (Hardware)' },
-    { id: '2', name: 'Periféricos e acessórios' },
-    { id: '3', name: 'PCs Desktop e Gamer' },
-    { id: '4', name: 'Laptops e Netbooks' },
-    { id: '5', name: 'Tablets e E-readers' },
-    { id: '6', name: 'Smartphones e Tablets' },
-    { id: '7', name: 'TVs e Monitores' },
-    { id: '8', name: 'Fones de ouvido e Headsets' },
-    { id: '9', name: 'Câmeras e Webcams' },
-    { id: '10', name: 'Impressoras e Escritórios' },
-    { id: '11', name: 'Consoles e Jogos' },
-    { id: '12', name: 'Ferramentas e Equipamentos' },
-    { id: '13', name: 'Eletrodomésticos' },
-    // Outras categorias...
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleCategoryPress = (categoryName) => {
-    if (categoryName === 'Peças (Hardware)') {
-      navigation.navigate('HardwareProducts', { categoryName });
-    } else if (categoryName === 'Periféricos e acessórios') {
-      navigation.navigate('PeripheralsAccessories', { categoryName });
-    } else if (categoryName === 'PCs Desktop e Gamer') {
-      navigation.navigate('PCsDesktopGamer', { categoryName });
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/categories');
+      setCategories(response.data.categories);
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao buscar categorias:', err);
+      setError('Não foi possível carregar as categorias. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
     }
-    // Adicione navegação para outras categorias conforme necessário
+  };
+
+  const handleCategoryPress = (category) => {
+    const categoryName = category.nome;
+    const categoryId = category.id_categoria;
+    
+    // Todas as categorias agora usam a mesma tela que busca da API
+    navigation.navigate('ProductsScreen', { categoryName, categoryId })
   };
 
   const handleLogoPress = () => {
@@ -50,16 +53,30 @@ const CategoriesScreen = () => {
       </View>
       <Text style={styles.title}>CATEGORIAS</Text>
       <View style={styles.scrollContainer}>
-        <FlatList
-          data={categories}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleCategoryPress(item.name)}>
-              <CategoryItem item={item} />
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="red" />
+            <Text style={styles.loadingText}>Carregando categorias...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={fetchCategories}>
+              <Text style={styles.retryButtonText}>Tentar novamente</Text>
             </TouchableOpacity>
-          )}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.flatListContent}
-        />
+          </View>
+        ) : (
+          <FlatList
+            data={categories}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleCategoryPress(item)}>
+                <CategoryItem item={{ name: item.nome, description: item.descricao }} />
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id_categoria.toString()}
+            contentContainerStyle={styles.flatListContent}
+          />
+        )}
       </View>
       <BottomNavigation />
     </View>
@@ -105,6 +122,39 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingVertical: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: 'red',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

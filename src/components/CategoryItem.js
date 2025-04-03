@@ -5,6 +5,9 @@ const CategoryItem = ({ item }) => {
   return (
     <View style={styles.categoryItem}>
       <Text style={styles.categoryName}>{item.name}</Text>
+      {item.description && (
+        <Text style={styles.categoryDescription}>{item.description}</Text>
+      )}
     </View>
   );
 };
@@ -17,6 +20,12 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  categoryDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
   },
 });
 

@@ -1,26 +1,82 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
+import api from '../services/api';
 
 const HomeScreen = ({ navigation }) => {
   const { addToCart } = useContext(CartContext);
   const [searchText, setSearchText] = useState('');
-  const [products, setProducts] = useState([
-    { id: '1', name: 'Headset Gamer HyperX Cloud III Wireless', price: 'R$ 999,99', discountPrice: 'R$ 699,99', installments: 'R$ 823,52 em até 12x', image: 'https://www.dropbox.com/scl/fi/6bis8e7628l1mi51wj5da/Headset-Gamer-Hyper-X-Cloud-III-Wireless.jpg?rlkey=mc1xf3ug53zs1kfqsd87jmvit&st=af2e1514&dl=1', category: 'Produtos para Gamers' },
-    { id: '2', name: 'PC Gamer Pichau Far Cry', price: 'R$ 7.066,80', discountPrice: 'R$ 5.490,30', installments: 'R$ 6.459,18 em até 12x', image: 'https://www.dropbox.com/scl/fi/p72bs2py20ruh5mvknxos/pc-completo-pichau-far-cry-0034.jpg?rlkey=cnutw3l54525o9icxpit0cjnp&st=6kird0xr&dl=1', category: 'PCs Desktop e Gamer' },
-    { id: '3', name: 'PC Gamer Pichau Hefesto IV', price: 'R$ 5.205,19', discountPrice: 'R$ 3.349,90', installments: 'R$ 3.941,16 em até 12x', image: 'https://www.dropbox.com/scl/fi/73dmcl5n9vrevs3bhogew/PC-Gamer-Pichau-Hefesto-IV.jpg?rlkey=iaxjb2nwwdhte7uaeuwov2w8f&st=6qlo7r37&dl=1', category: 'PCs Desktop e Gamer' },
-    { id: '4', name: 'Mouse Gamer Redragon King Pro 4K', price: 'R$ 422,52', discountPrice: 'R$ 299,90', installments: 'R$ 351,16 em até 12x', image: 'https://www.dropbox.com/scl/fi/m2flo68c8uqtvwceg46t5/Mouse-Gamer-Redragon-King-Pro-4K.jpg?rlkey=r1haqhrgys45z0qtn8ewuyphk&st=p2dj1z8h&dl=1', category: 'Produtos para Gamers' },
-    { id: '5', name: 'Teclado Mecânico Redragon Kumara', price: 'R$ 299,99', discountPrice: 'R$ 199,99', installments: 'R$ 234,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/7ppoz0f64wc8uu27ju9h7/Teclado-Mec-nico-Redragon-Kumara-RGB.jpg?rlkey=fsfg9pqd0nabfrzz3bnoqpvq5&st=irbpdajp&dl=1', category: 'Produtos para Gamers' },
-    { id: '6', name: 'Monitor Gamer AOC 24G2', price: 'R$ 1.299,99', discountPrice: 'R$ 899,99', installments: 'R$ 1.053,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/zcs2hrmjop3mac9d2f54v/Monitor-Gamer-AOC-24G2.jpg?rlkey=ew0jpj95ufr91hp3vdmzwbwce&st=xhsrel9p&dl=1', category: 'Monitores' },
-    { id: '7', name: 'Cadeira Gamer DXRacer', price: 'R$ 2.499,99', discountPrice: 'R$ 1.999,99', installments: 'R$ 2.339,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/tmd93f1fulkwvmfoub4qp/Cadeira-Gamer-DXRacer.jpg?rlkey=j816oab4jrvmbps5wf8szjjb0&st=lx12npxk&dl=1', category: 'Cadeiras e Mesas Gamer e Escritório' },
-    { id: '8', name: 'Webcam Logitech C920', price: 'R$ 499,99', discountPrice: 'R$ 399,99', installments: 'R$ 467,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/bqird1fyklzpmxpfzpulf/Webcam-Logitech-C920.jpg?rlkey=22wlr2mpl86e243x4ri0if5ig&st=2k3nax55&dl=1', category: 'Câmeras e Acessórios' },
-    { id: '9', name: 'Notebook Gamer Acer Nitro 5', price: 'R$ 4.999,99', discountPrice: 'R$ 3.999,99', installments: 'R$ 4.679,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/5t7m5yra0dreg1vp4ao0l/Notebook-Gamer-ACer-Nitro-5.jpg?rlkey=zzta8dsflf35htewcp9cho8qa&st=d6h995rw&dl=1', category: 'Notebooks e Portáteis' },
-    { id: '10', name: 'Placa de Vídeo RTX 3070', price: 'R$ 5.999,99', discountPrice: 'R$ 4.799,99', installments: 'R$ 5.623,99 em até 12x', image: 'https://www.dropbox.com/scl/fi/m2tvo222t3qumcr4uvcbj/Placa-de-V-deo-RTX-3070.jpg?rlkey=hgkvluhezodp7pfbn3jdndgqu&st=v32e85q2&dl=1', category: 'Placas de Vídeo' },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  // Função para buscar produtos da API
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/products');
+      
+      // Log para verificar a estrutura dos dados recebidos
+      console.log('Dados recebidos da API:', JSON.stringify(response.data.data[0]));
+      
+      // Transformar os dados da API para o formato esperado pelo app
+      const formattedProducts = response.data.data.map(product => {
+        // Verificar se o campo preco existe e é um número antes de usar toFixed
+        let precoFormatado = 'Preço indisponível';
+        let precoDesconto = 'Preço indisponível';
+        let precoParcelas = 'Preço indisponível';
+        
+        if (product.preco !== undefined && product.preco !== null) {
+          // Converter para número se for string
+          const precoNumerico = typeof product.preco === 'string' ? 
+            parseFloat(product.preco.replace(',', '.')) : 
+            Number(product.preco);
+            
+          if (!isNaN(precoNumerico)) {
+            precoFormatado = `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`;
+            precoDesconto = `R$ ${(precoNumerico * 0.8).toFixed(2).replace('.', ',')}`;
+            precoParcelas = `R$ ${(precoNumerico * 1.1).toFixed(2).replace('.', ',')} em até 12x`;
+          }
+        }
+        
+        return {
+          id: product.id_produto.toString(),
+          name: product.nome,
+          price: precoFormatado,
+          discountPrice: precoDesconto,
+          installments: precoParcelas,
+          // Usando uma imagem padrão ou descrição como imagem
+          image: 'https://www.dropbox.com/scl/fi/m2tvo222t3qumcr4uvcbj/Placa-de-V-deo-RTX-3070.jpg?rlkey=hgkvluhezodp7pfbn3jdndgqu&st=v32e85q2&dl=1',
+          category: 'Categoria Padrão', // Categoria padrão, pode ser ajustada se a API fornecer
+          description: product.descricao
+        };
+      });
+      
+      setProducts(formattedProducts);
+      setFilteredProducts(formattedProducts);
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao buscar produtos:', err);
+      setError('Não foi possível carregar os produtos. Tente novamente mais tarde.');
+      // Manter os produtos de exemplo como fallback em caso de erro
+      const fallbackProducts = [
+        { id: '1', name: 'Headset Gamer HyperX Cloud III Wireless', price: 'R$ 999,99', discountPrice: 'R$ 699,99', installments: 'R$ 823,52 em até 12x', image: 'https://www.dropbox.com/scl/fi/6bis8e7628l1mi51wj5da/Headset-Gamer-Hyper-X-Cloud-III-Wireless.jpg?rlkey=mc1xf3ug53zs1kfqsd87jmvit&st=af2e1514&dl=1', category: 'Produtos para Gamers' },
+        { id: '2', name: 'PC Gamer Pichau Far Cry', price: 'R$ 7.066,80', discountPrice: 'R$ 5.490,30', installments: 'R$ 6.459,18 em até 12x', image: 'https://www.dropbox.com/scl/fi/p72bs2py20ruh5mvknxos/pc-completo-pichau-far-cry-0034.jpg?rlkey=cnutw3l54525o9icxpit0cjnp&st=6kird0xr&dl=1', category: 'PCs Desktop e Gamer' },
+      ];
+      setProducts(fallbackProducts);
+      setFilteredProducts(fallbackProducts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Carregar produtos quando o componente montar
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (searchText === '') {
@@ -36,7 +92,13 @@ const HomeScreen = ({ navigation }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    navigation.navigate('Cart');
+    Alert.alert(
+      "Sucesso!",
+      `${product.name} foi adicionado ao seu carrinho!`,
+      [
+        { text: "OK", onPress: () => navigation.navigate('Cart') }
+      ]
+    );
   };
 
   return (
@@ -46,26 +108,46 @@ const HomeScreen = ({ navigation }) => {
         <SearchBar value={searchText} onChangeText={setSearchText} />
       </View>
       <Text style={styles.title}>Ofertas em Destaques!</Text>
+      
+      {/* Exibir mensagem de erro se houver */}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={fetchProducts}>
+            <Text style={styles.retryButtonText}>Tentar Novamente</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      
       <View style={styles.scrollContainer}>
-        <FlatList
-          data={filteredProducts}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleAddToCart(item)}>
-              <View style={styles.card}>
-                <Image source={{ uri: item.image }} style={styles.itemImage} />
-                <View style={styles.itemDetails}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemPrice}>De {item.price}</Text>
-                  <Text style={styles.itemDiscountPrice}>{item.discountPrice} no PIX</Text>
-                  <Text style={styles.itemInstallments}>{item.installments}</Text>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0066cc" />
+            <Text style={styles.loadingText}>Carregando produtos...</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredProducts}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleAddToCart(item)}>
+                <View style={styles.card}>
+                  <Image source={{ uri: item.image }} style={styles.itemImage} />
+                  <View style={styles.itemDetails}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemPrice}>De {item.price}</Text>
+                    <Text style={styles.itemDiscountPrice}>{item.discountPrice} no PIX</Text>
+                    <Text style={styles.itemInstallments}>{item.installments}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          )}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={<Text style={styles.noResults}>Nenhum produto encontrado.</Text>}
-          contentContainerStyle={styles.contentContainer}
-        />
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={<Text style={styles.noResults}>Nenhum produto encontrado.</Text>}
+            contentContainerStyle={styles.contentContainer}
+            onRefresh={fetchProducts}
+            refreshing={loading}
+          />
+        )}
       </View>
       <BottomNavigation />
     </View>
@@ -154,6 +236,40 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 35,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorContainer: {
+    padding: 20,
+    backgroundColor: '#ffebee',
+    borderRadius: 8,
+    margin: 10,
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#d32f2f',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  retryButton: {
+    backgroundColor: '#0066cc',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

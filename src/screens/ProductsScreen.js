@@ -1,43 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Text, Image } from 'react-native';
+import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import SearchBar from '../components/SearchBar';
 import ProductItem from '../components/ProductItem';
 import BottomNavigation from '../components/BottomNavigation';
+import api from '../services/api';
 
 const ProductsScreen = ({ route }) => {
-  const { categoryName } = route.params;
+  const { categoryName, categoryId } = route.params;
+  const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const productsByCategory = {
-    'Hardware': [
-      { id: '1', name: 'Placa de Vídeo RTX 3070', price: 'R$ 5.999,99', discountPrice: 'R$ 4.799,99', installments: 'R$ 5.623,99 em até 12x', image: 'https://via.placeholder.com/150' },
-      { id: '2', name: 'Processador Intel Core i9', price: 'R$ 2.499,99', discountPrice: 'R$ 1.999,99', installments: 'R$ 2.339,99 em até 12x', image: 'https://via.placeholder.com/150' },
-      // Adicione mais produtos conforme necessário
-    ],
-    'Periféricos': [
-      { id: '3', name: 'Mouse Gamer Redragon King Pro 4K', price: 'R$ 422,52', discountPrice: 'R$ 299,90', installments: 'R$ 351,16 em até 12x', image: 'https://via.placeholder.com/150' },
-      { id: '4', name: 'Teclado Mecânico Redragon Kumara', price: 'R$ 299,99', discountPrice: 'R$ 199,99', installments: 'R$ 234,99 em até 12x', image: 'https://via.placeholder.com/150' },
-      // Adicione mais produtos conforme necessário
-    ],
-    'Computadores': [
-      { id: '5', name: 'PC Gamer Pichau Far Cry', price: 'R$ 7.066,80', discountPrice: 'R$ 5.490,30', installments: 'R$ 6.459,18 em até 12x', image: 'https://via.placeholder.com/150' },
-      { id: '6', name: 'PC Gamer Pichau Hefesto IV', price: 'R$ 5.205,19', discountPrice: 'R$ 3.349,90', installments: 'R$ 3.941,16 em até 12x', image: 'https://via.placeholder.com/150' },
-      // Adicione mais produtos conforme necessário
-    ],
-  };
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [filteredProducts, setFilteredProducts] = useState(productsByCategory[categoryName] || []);
+  useEffect(() => {
+    fetchProducts();
+  }, [categoryId]);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/categories/${categoryId}/products`);
+      const productsData = response.data.products.map(product => ({
+        id: product.id_produto.toString(),
+        name: product.nome,
+        description: product.descricao,
+        price: `R$ ${parseFloat(product.preco).toFixed(2).replace('.', ',')}`,
+        discountPrice: `R$ ${(parseFloat(product.preco) * 0.9).toFixed(2).replace('.', ',')}`,
+        installments: `R$ ${(parseFloat(product.preco) * 1.1).toFixed(2).replace('.', ',')} em até 12x`,
+        image: 'https://via.placeholder.com/150',
+        estoque: product.estoque
+      }));
+      setProducts(productsData);
+      setFilteredProducts(productsData);
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao buscar produtos:', err);
+      setError('Não foi possível carregar os produtos. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (searchText === '') {
-      setFilteredProducts(productsByCategory[categoryName] || []);
+      setFilteredProducts(products);
     } else {
       setFilteredProducts(
-        (productsByCategory[categoryName] || []).filter(product =>
+        products.filter(product =>
           product.name.toLowerCase().includes(searchText.toLowerCase())
         )
       );
     }
-  }, [searchText, categoryName]);
+  }, [searchText, products]);
 
   return (
     <View style={styles.container}>
@@ -47,12 +64,30 @@ const ProductsScreen = ({ route }) => {
       </View>
       <Text style={styles.title}>{categoryName}</Text>
       <View style={styles.scrollContainer}>
-        <FlatList
-          data={filteredProducts}
-          renderItem={({ item }) => <ProductItem item={item} />}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={<Text style={styles.noResults}>Nenhum produto encontrado.</Text>}
-        />
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="red" />
+            <Text style={styles.loadingText}>Carregando produtos...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={fetchProducts}>
+              <Text style={styles.retryButtonText}>Tentar novamente</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredProducts}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { product: item })}>
+                <ProductItem item={item} />
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={<Text style={styles.noResults}>Nenhum produto encontrado.</Text>}
+          />
+        )}
       </View>
       <BottomNavigation />
     </View>
@@ -97,6 +132,39 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
     color: '#999',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: 'red',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

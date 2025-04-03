@@ -11,6 +11,8 @@ import PeripheralsAccessoriesScreen from '../screens/PeripheralsAccessoriesScree
 import PCsDesktopGamerScreen from '../screens/PCsDesktopGamerScreen'; 
 import OrderSummaryScreen from '../screens/OrderSummaryScreen';
 import CustomerServiceScreen from '../screens/CustomerServiceScreen';
+import ProductsScreen from '../screens/ProductsScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +30,8 @@ const AppNavigator = () => {
         <Stack.Screen name="PCsDesktopGamer" component={PCsDesktopGamerScreen} /> 
         <Stack.Screen name="OrderSummary" component={OrderSummaryScreen} /> 
         <Stack.Screen name="CustomerService" component={CustomerServiceScreen} /> 
+        <Stack.Screen name="ProductsScreen" component={ProductsScreen} /> 
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

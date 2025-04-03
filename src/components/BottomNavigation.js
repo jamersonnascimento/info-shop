@@ -37,21 +37,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     backgroundColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 5, // Adicionado para espaçamento interno
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     position: 'absolute',
     bottom: 0,
+    left: 0,
+    right: 0,
     width: '100%',
-    elevation: 8, // Somente para Android (efeito de elevação)
-    zIndex: 1, // Garante que o BottomNavigation fique acima de outros elementos
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    zIndex: 100,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.2)',
   },
   navItem: {
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 5,
   },
   navText: {
     color: 'white',
     fontSize: 12,
-    marginTop: 5, // Espaçamento entre o ícone e o texto
+    fontWeight: 'bold',
+    marginTop: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
 });
 
