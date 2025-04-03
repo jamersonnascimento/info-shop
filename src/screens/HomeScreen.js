@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import SearchBar from '../components/SearchBar';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 import api from '../services/api';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const navigation = useNavigation();
   const { addToCart } = useContext(CartContext);
   const [searchText, setSearchText] = useState('');
   const [products, setProducts] = useState([]);
@@ -90,15 +92,8 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [searchText, products]);
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    Alert.alert(
-      "Sucesso!",
-      `${product.name} foi adicionado ao seu carrinho!`,
-      [
-        { text: "OK", onPress: () => navigation.navigate('Cart') }
-      ]
-    );
+  const handleProductPress = (product) => {
+    navigation.navigate('ProductDetail', { product });
   };
 
   return (
@@ -129,7 +124,7 @@ const HomeScreen = ({ navigation }) => {
           <FlatList
             data={filteredProducts}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleAddToCart(item)}>
+              <TouchableOpacity onPress={() => handleProductPress(item)}>
                 <View style={styles.card}>
                   <Image source={{ uri: item.image }} style={styles.itemImage} />
                   <View style={styles.itemDetails}>
