@@ -1,9 +1,12 @@
+// This file contains controller functions for managing products in the application.
+// It includes operations such as creating, retrieving, updating, and deleting products, as well as managing categories associated with products.
+
 const db = require('../models');
 const Product = db.Product;
 const Category = db.Category;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Product
 const PRODUCT_ATTRIBUTES = [
   'id_produto',
   'nome',
@@ -14,12 +17,12 @@ const PRODUCT_ATTRIBUTES = [
   'atualizado_em'
 ];
 
-// Criar um novo Produto
+// Create a new Product
 exports.create = async (req, res) => {
   try {
     const { nome, descricao, preco, estoque } = req.body;
 
-    // Validações mais robustas
+    // Robust validations
     if (!nome?.trim()) {
       return res.status(400).json({ message: 'Nome do produto é obrigatório e não pode estar vazio' });
     }
@@ -32,7 +35,7 @@ exports.create = async (req, res) => {
       return res.status(400).json({ message: 'Estoque deve ser um número não negativo' });
     }
 
-    // Criação do Produto
+    // Create the Product
     const product = await Product.create({ 
       nome,
       descricao,
@@ -52,7 +55,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar todos os Produtos com paginação
+// Retrieve all Products with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -111,7 +114,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Buscar um Produto específico
+// Retrieve a specific Product
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -135,7 +138,7 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Atualizar um Produto
+// Update a Product
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
@@ -145,7 +148,7 @@ exports.update = async (req, res) => {
       return res.status(400).json({ message: 'ID inválido' });
     }
 
-    // Validações dos campos a serem atualizados
+    // Validations for fields to be updated
     if (nome !== undefined && !nome.trim()) {
       return res.status(400).json({ message: 'Nome não pode ser vazio' });
     }
@@ -178,14 +181,14 @@ exports.update = async (req, res) => {
       data: product
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status500.json({ 
       message: 'Erro ao atualizar o produto.', 
       error: error.message 
     });
   }
 };
 
-// Deletar um Produto
+// Delete a Product
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -198,7 +201,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o produto está em algum carrinho
+    // Check if the product is in any cart
     const hasCartItems = await product.countCartItems();
     if (hasCartItems > 0) {
       return res.status(403).json({ 
@@ -220,7 +223,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Adicionar categoria a um produto
+// Add a category to a product
 exports.addCategory = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -253,7 +256,7 @@ exports.addCategory = async (req, res) => {
   }
 };
 
-// Remover categoria de um produto
+// Remove a category from a product
 exports.removeCategory = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -282,7 +285,7 @@ exports.removeCategory = async (req, res) => {
   }
 };
 
-// Listar categorias de um produto
+// List categories of a product
 exports.findCategories = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -298,11 +301,11 @@ exports.findCategories = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
-    // Busca categorias associadas ao produto com paginação
+    // Retrieve categories associated with the product with pagination
     const categories = await product.getCategories({
       limit: parseInt(limit),
       offset: parseInt(offset),
-      joinTableAttributes: [], // Não retorna atributos da tabela de junção
+      joinTableAttributes: [], // Do not return attributes from the join table
       attributes: [
         'id_categoria',
         'nome',
@@ -312,7 +315,7 @@ exports.findCategories = async (req, res) => {
       ]
     });
 
-    // Conta o total de categorias associadas ao produto (sem paginação)
+    // Count the total number of categories associated with the product (without pagination)
     const count = await product.countCategories();
 
     res.status(200).json({

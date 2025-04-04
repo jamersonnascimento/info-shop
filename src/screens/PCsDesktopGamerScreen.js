@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 
+// PCsDesktopGamerScreen component displays a list of gaming PCs
 const PCsDesktopGamerScreen = ({ route }) => {
   const navigation = useNavigation();
   const { categoryName } = route.params;
@@ -40,7 +41,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
   };
 
   const handlePurchase = () => {
-    // Um alerta para o botão addToCart
+    // Alert for the addToCart button
     alert("Produto adicionado ao carrinho!");
   };
 
@@ -83,7 +84,7 @@ const PCsDesktopGamerScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d3d3d3',  // Fundo cinza mais forte
+    backgroundColor: '#d3d3d3',  // Stronger gray background
     padding: 0,
   },
   header: {
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   addButton: {
-    backgroundColor: '#228B22', // Cor verde
+    backgroundColor: '#228B22', // Green color
     paddingVertical: 8,
     borderRadius: 5,
     marginTop: 10,

@@ -2,21 +2,21 @@ module.exports = (app) => {
   const cartItemController = require('../controllers/cartItem.controller');
   const router = require('express').Router();
 
-  // Rotas para operações em itens de carrinho
+  // Routes for cart item operations
   router.route('/')
-    .post(cartItemController.create)    // Criar item no carrinho
-    .get(cartItemController.findAll);   // Listar todos com paginação
+    .post(cartItemController.create)    // Create cart item
+    .get(cartItemController.findAll);   // List all with pagination
 
   router.route('/:id')
-    .get(cartItemController.findOne)        // Buscar por ID
-    .patch(cartItemController.updateQuantity) // Atualizar quantidade
-    .delete(cartItemController.delete);     // Deletar
+    .get(cartItemController.findOne)        // Find by ID
+    .patch(cartItemController.updateQuantity) // Update quantity
+    .delete(cartItemController.delete);     // Delete
 
-  // Rotas específicas para operações em itens de um carrinho específico
+  // Specific routes for operations on items of a specific cart
   router.route('/cart/:id_carrinho')
-    .get(cartItemController.findAllByCart)     // Listar itens de um carrinho
-    .delete(cartItemController.deleteAllByCart); // Deletar todos os itens de um carrinho
+    .get(cartItemController.findAllByCart)     // List items of a cart
+    .delete(cartItemController.deleteAllByCart); // Delete all items of a cart
 
-  // Prefixo base para todas as rotas de CartItem
+  // Base prefix for all CartItem routes
   app.use('/api/cart-items', router);
 };

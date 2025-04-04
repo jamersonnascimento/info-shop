@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// EmptyFavoritesMessage component displays a message when there are no favorite products
 const EmptyFavoritesMessage = () => {
   return (
     <View style={styles.container}>

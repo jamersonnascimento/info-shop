@@ -3,17 +3,18 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import LoginForm from '../components/LoginForm';
 import BottomNavigation from '../components/BottomNavigation';
 
+// AccountScreen component provides the user interface for account management
 const AccountScreen = ({ navigation }) => {
   const handleLogin = (email, password) => {
-    // Implementar lógica de login
+    // Implement login logic
   };
 
   const handleRegister = () => {
-    // Implementar navegação para a tela de cadastro
+    // Implement navigation to the registration screen
   };
 
   const handleForgotPassword = () => {
-    // Implementar navegação para a tela de recuperação de senha
+    // Implement navigation to the password recovery screen
   };
 
   const handleCustomerService = () => {
@@ -36,7 +37,7 @@ const AccountScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Formulário de Login */}
+      {/* Login Form */}
       <LoginForm
         onLogin={handleLogin}
         onRegister={handleRegister}
@@ -54,12 +55,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    backgroundColor: '#F6ECDA', // Fundo branco
+    backgroundColor: '#F6ECDA', // Background color
   },
   logoContainer: {
     alignItems: 'center',
     marginTop: 50,
-    marginBottom: 30, // Mais espaço entre o logo e o formulário
+    marginBottom: 30, // Space between the logo and the form
   },
   logo: {
     width: 200,

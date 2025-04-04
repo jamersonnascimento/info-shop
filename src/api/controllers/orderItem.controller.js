@@ -1,10 +1,13 @@
+// This file contains controller functions for managing order items in the application.
+// It includes operations such as creating, retrieving, updating, and deleting order items.
+
 const db = require('../models');
 const OrderItem = db.OrderItem;
 const Order = db.Order;
 const Product = db.Product;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for OrderItem and Product
 const ORDERITEM_ATTRIBUTES = [
   'id_item_pedido',
   'id_pedido',
@@ -24,12 +27,12 @@ const PRODUCT_ATTRIBUTES = [
   'estoque'
 ];
 
-// Criar um novo Item no Pedido
+// Create a new Item in the Order
 exports.create = async (req, res) => {
   try {
     const { id_pedido, id_produto, quantidade, preco_unit } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_pedido) {
       return res.status(400).json({ 
         message: 'ID do pedido é obrigatório.' 
@@ -42,7 +45,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido existe
+    // Check if the order exists
     const order = await Order.findByPk(id_pedido);
     if (!order) {
       return res.status(404).json({ 
@@ -50,14 +53,14 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido está em um estado que permite adicionar itens
+    // Check if the order is in a state that allows adding items
     if (order.status !== 'pendente') {
       return res.status(403).json({ 
         message: `Não é possível adicionar itens a um pedido ${order.status}.` 
       });
     }
 
-    // Verifica se o produto existe
+    // Check if the product exists
     const product = await Product.findByPk(id_produto);
     if (!product) {
       return res.status(404).json({ 
@@ -65,14 +68,14 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o produto tem estoque suficiente
+    // Check if the product has sufficient stock
     if (product.estoque < quantidade) {
       return res.status(400).json({ 
         message: 'Quantidade solicitada indisponível em estoque.' 
       });
     }
 
-    // Verifica se o item já existe no pedido
+    // Check if the item already exists in the order
     const existingItem = await OrderItem.findOne({
       where: { 
         id_pedido,
@@ -84,22 +87,22 @@ exports.create = async (req, res) => {
     const transaction = await db.sequelize.transaction();
     
     try {
-      // Determina o preço unitário a ser usado
+      // Determine the unit price to be used
       const finalPrice = preco_unit || product.preco;
       const subtotal = parseFloat(finalPrice) * quantidade;
       
       if (existingItem) {
-        // Atualiza a quantidade se o item já existir
+        // Update the quantity if the item already exists
         const newQuantity = existingItem.quantidade + quantidade;
         
-        // Verifica novamente o estoque para a nova quantidade
+        // Check stock again for the new quantity
         if (product.estoque < newQuantity) {
           return res.status(400).json({ 
             message: 'Quantidade solicitada indisponível em estoque.' 
           });
         }
         
-        // Calcula o novo subtotal
+        // Calculate the new subtotal
         const newSubtotal = parseFloat(existingItem.preco_unit) * newQuantity;
         
         orderItem = await existingItem.update({ 
@@ -107,7 +110,7 @@ exports.create = async (req, res) => {
           subtotal: newSubtotal
         }, { transaction });
       } else {
-        // Cria um novo item
+        // Create a new item
         orderItem = await OrderItem.create({ 
           id_pedido,
           id_produto,
@@ -117,7 +120,7 @@ exports.create = async (req, res) => {
         }, { transaction });
       }
       
-      // Atualiza o estoque do produto
+      // Update the product stock
       await Product.update({
         estoque: product.estoque - quantidade
       }, { 
@@ -125,7 +128,7 @@ exports.create = async (req, res) => {
         transaction 
       });
       
-      // Recalcula o total do pedido
+      // Recalculate the order total
       const orderItems = await OrderItem.findAll({
         where: { id_pedido },
         transaction
@@ -135,16 +138,16 @@ exports.create = async (req, res) => {
         return sum + parseFloat(item.subtotal);
       }, 0);
       
-      // Atualiza o total do pedido
+      // Update the order total
       await Order.update({ total }, {
         where: { id_pedido },
         transaction
       });
       
-      // Commit da transação
+      // Commit the transaction
       await transaction.commit();
       
-      // Busca o item criado/atualizado com todas as relações
+      // Retrieve the created/updated item with all relations
       const result = await OrderItem.findByPk(orderItem.id_item_pedido, {
         include: [{
           model: Product,
@@ -158,7 +161,7 @@ exports.create = async (req, res) => {
         data: result
       });
     } catch (error) {
-      // Rollback em caso de erro
+      // Rollback in case of error
       await transaction.rollback();
       throw error;
     }
@@ -170,7 +173,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar um Item específico
+// Retrieve a specific Item
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -202,14 +205,14 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Listar todos os Itens com paginação
+// List all Items with pagination
 exports.findAll = async (req, res) => {
   try {
     const { page = 1, size = 10, id_pedido } = req.query;
     const limit = parseInt(size);
     const offset = (parseInt(page) - 1) * limit;
 
-    // Construir condições de filtro
+    // Build filter conditions
     const condition = {};
     if (id_pedido) condition.id_pedido = id_pedido;
 
@@ -242,7 +245,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Listar todos os Itens de um pedido específico
+// List all Items of a specific order
 exports.findAllByOrder = async (req, res) => {
   try {
     const { id_pedido } = req.params;
@@ -250,7 +253,7 @@ exports.findAllByOrder = async (req, res) => {
     const limit = parseInt(size);
     const offset = (parseInt(page) - 1) * limit;
 
-    // Verifica se o pedido existe
+    // Check if the order exists
     const order = await Order.findByPk(id_pedido);
     if (!order) {
       return res.status(404).json({ 
@@ -287,7 +290,7 @@ exports.findAllByOrder = async (req, res) => {
   }
 };
 
-// Atualizar a quantidade de um Item
+// Update the quantity of an Item
 exports.updateQuantity = async (req, res) => {
   const transaction = await db.sequelize.transaction();
   
@@ -295,14 +298,14 @@ exports.updateQuantity = async (req, res) => {
     const { id } = req.params;
     const { quantidade } = req.body;
 
-    // Validações
+    // Validate required fields
     if (!quantidade || quantidade <= 0) {
       return res.status(400).json({ 
         message: 'Quantidade deve ser maior que zero.' 
       });
     }
 
-    // Verifica se o item existe
+    // Check if the item exists
     const orderItem = await OrderItem.findByPk(id, {
       include: [{
         model: Product,
@@ -316,7 +319,7 @@ exports.updateQuantity = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido está em um estado que permite atualizar itens
+    // Check if the order is in a state that allows updating items
     const order = await Order.findByPk(orderItem.id_pedido);
     if (order.status !== 'pendente') {
       return res.status(403).json({ 
@@ -324,26 +327,26 @@ exports.updateQuantity = async (req, res) => {
       });
     }
 
-    // Calcula a diferença de quantidade
+    // Calculate the quantity difference
     const quantityDiff = quantidade - orderItem.quantidade;
     
-    // Verifica estoque se estiver aumentando a quantidade
+    // Check stock if increasing the quantity
     if (quantityDiff > 0 && orderItem.product.estoque < quantityDiff) {
       return res.status(400).json({ 
         message: 'Quantidade solicitada indisponível em estoque.' 
       });
     }
 
-    // Calcula o novo subtotal
+    // Calculate the new subtotal
     const subtotal = parseFloat(orderItem.preco_unit) * quantidade;
     
-    // Atualiza o item
+    // Update the item
     await orderItem.update({ 
       quantidade,
       subtotal
     }, { transaction });
     
-    // Atualiza o estoque do produto
+    // Update the product stock
     await Product.update({
       estoque: orderItem.product.estoque - quantityDiff
     }, { 
@@ -351,7 +354,7 @@ exports.updateQuantity = async (req, res) => {
       transaction 
     });
     
-    // Recalcula o total do pedido
+    // Recalculate the order total
     const orderItems = await OrderItem.findAll({
       where: { id_pedido: orderItem.id_pedido },
       transaction
@@ -361,16 +364,16 @@ exports.updateQuantity = async (req, res) => {
       return sum + parseFloat(item.subtotal);
     }, 0);
     
-    // Atualiza o total do pedido
+    // Update the order total
     await Order.update({ total }, {
       where: { id_pedido: orderItem.id_pedido },
       transaction
     });
     
-    // Commit da transação
+    // Commit the transaction
     await transaction.commit();
     
-    // Busca o item atualizado
+    // Retrieve the updated item
     const updatedItem = await OrderItem.findByPk(id, {
       include: [{
         model: Product,
@@ -384,7 +387,7 @@ exports.updateQuantity = async (req, res) => {
       data: updatedItem
     });
   } catch (error) {
-    // Rollback em caso de erro
+    // Rollback in case of error
     await transaction.rollback();
     
     res.status(500).json({ 
@@ -394,14 +397,14 @@ exports.updateQuantity = async (req, res) => {
   }
 };
 
-// Deletar um Item
+// Delete an Item
 exports.delete = async (req, res) => {
   const transaction = await db.sequelize.transaction();
   
   try {
     const { id } = req.params;
 
-    // Verifica se o item existe
+    // Check if the item exists
     const orderItem = await OrderItem.findByPk(id, {
       include: [{
         model: Product,
@@ -415,7 +418,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido está em um estado que permite remover itens
+    // Check if the order is in a state that allows removing items
     const order = await Order.findByPk(orderItem.id_pedido);
     if (order.status !== 'pendente') {
       return res.status(403).json({ 
@@ -423,7 +426,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Restaura o estoque do produto
+    // Restore the product stock
     await Product.update({
       estoque: orderItem.product.estoque + orderItem.quantidade
     }, { 
@@ -431,13 +434,13 @@ exports.delete = async (req, res) => {
       transaction 
     });
     
-    // Remove o item
+    // Remove the item
     await OrderItem.destroy({
       where: { id_item_pedido: id },
       transaction
     });
     
-    // Recalcula o total do pedido
+    // Recalculate the order total
     const orderItems = await OrderItem.findAll({
       where: { id_pedido: orderItem.id_pedido },
       transaction
@@ -447,20 +450,20 @@ exports.delete = async (req, res) => {
       return sum + parseFloat(item.subtotal);
     }, 0);
     
-    // Atualiza o total do pedido
+    // Update the order total
     await Order.update({ total }, {
       where: { id_pedido: orderItem.id_pedido },
       transaction
     });
     
-    // Commit da transação
+    // Commit the transaction
     await transaction.commit();
     
     res.status(200).json({
       message: 'Item removido do pedido com sucesso!'
     });
   } catch (error) {
-    // Rollback em caso de erro
+    // Rollback in case of error
     await transaction.rollback();
     
     res.status(500).json({ 
@@ -470,14 +473,14 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Deletar todos os Itens de um pedido
+// Delete all Items of an order
 exports.deleteAllByOrder = async (req, res) => {
   const transaction = await db.sequelize.transaction();
   
   try {
     const { id_pedido } = req.params;
 
-    // Verifica se o pedido existe
+    // Check if the order exists
     const order = await Order.findByPk(id_pedido);
     if (!order) {
       return res.status(404).json({ 
@@ -485,14 +488,14 @@ exports.deleteAllByOrder = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido está em um estado que permite remover itens
+    // Check if the order is in a state that allows removing items
     if (order.status !== 'pendente') {
       return res.status(403).json({ 
         message: `Não é possível remover itens de um pedido ${order.status}.` 
       });
     }
 
-    // Busca todos os itens do pedido
+    // Retrieve all items of the order
     const orderItems = await OrderItem.findAll({
       where: { id_pedido },
       include: [{
@@ -501,7 +504,7 @@ exports.deleteAllByOrder = async (req, res) => {
       }]
     });
 
-    // Restaura o estoque de cada produto
+    // Restore the stock of each product
     for (const item of orderItems) {
       await Product.update({
         estoque: item.product.estoque + item.quantidade
@@ -511,26 +514,26 @@ exports.deleteAllByOrder = async (req, res) => {
       });
     }
     
-    // Remove todos os itens
+    // Remove all items
     await OrderItem.destroy({
       where: { id_pedido },
       transaction
     });
     
-    // Zera o total do pedido
+    // Reset the order total
     await Order.update({ total: 0 }, {
       where: { id_pedido },
       transaction
     });
     
-    // Commit da transação
+    // Commit the transaction
     await transaction.commit();
     
     res.status(200).json({
       message: 'Todos os itens foram removidos do pedido com sucesso!'
     });
   } catch (error) {
-    // Rollback em caso de erro
+    // Rollback in case of error
     await transaction.rollback();
     
     res.status(500).json({ 

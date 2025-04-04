@@ -6,6 +6,7 @@ import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 import ProductImage from '../components/ProductImage';
 
+// ProductDetailScreen component displays detailed information about a product
 const ProductDetailScreen = ({ route }) => {
   const { product } = route.params;
   const navigation = useNavigation();
@@ -13,7 +14,7 @@ const ProductDetailScreen = ({ route }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
-    // Adiciona o produto ao carrinho com a quantidade selecionada
+    // Adds the product to the cart with the selected quantity
     const productToAdd = {
       ...product,
       quantity: quantity
@@ -21,7 +22,7 @@ const ProductDetailScreen = ({ route }) => {
     
     addToCart(productToAdd);
     
-    // Exibe um alerta de confirmação
+    // Displays a confirmation alert
     Alert.alert(
       "Produto adicionado",
       `${product.name} foi adicionado ao seu carrinho!`,
@@ -72,7 +73,7 @@ const ProductDetailScreen = ({ route }) => {
             fallbackUrl={product.imageUrl} 
             style={styles.productImage} 
             resizeMode="contain"
-            productId={product.id} // Adicionando o ID do produto para buscar imagem local
+            productId={product.id} // Adding product ID to fetch local image
           />
         </View>
 
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    marginBottom: 60, // Espaço para o BottomNavigation
+    marginBottom: 60, // Space for BottomNavigation
   },
   productImageContainer: {
     backgroundColor: 'white',

@@ -3,20 +3,21 @@ module.exports = app => {
   const paymentController = require('../controllers/payment.controller');
   const router = require('express').Router();
 
-  // Criar um novo pagamento
+  // Create a new payment
   router.post('/', paymentController.create);
 
-  // Buscar todos os pagamentos com paginação e filtros
+  // Retrieve all payments with pagination and filters
   router.get('/', paymentController.findAll);
 
-  // Buscar um pagamento específico por ID
+  // Retrieve a specific payment by ID
   router.get('/:id', paymentController.findOne);
 
-  // Atualizar status de um pagamento
+  // Update the status of a payment
   router.put('/:id', paymentController.update);
 
-  // Deletar um pagamento (com validação de status)
+  // Delete a payment (with status validation)
   router.delete('/:id', paymentController.delete);
 
+  // Base prefix for all Payment routes
   app.use('/api/payments', router);
 };

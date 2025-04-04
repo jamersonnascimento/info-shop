@@ -4,18 +4,19 @@ import BottomNavigation from '../components/BottomNavigation';
 import CartItem from '../components/CartItem';
 import { CartContext } from '../context/CartContext';
 
+// OrderSummaryScreen component displays the summary of the order and payment options
 const OrderSummaryScreen = () => {
   const { cartItems, removeFromCart, updateQuantity } = useContext(CartContext);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Função para calcular o valor total dos produtos no carrinho
+  // Function to calculate the total value of products in the cart
   const totalValue = useMemo(() => {
     return cartItems.reduce((total, item) => total + item.quantity * parseFloat(item.discountPrice.replace('R$', '').replace('.', '').replace(',', '.')), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }, [cartItems]);
 
   const handlePurchase = (paymentMethod) => {
-    // Aqui você pode adicionar a lógica de compra com o método de pagamento selecionado
+    // Logic for purchasing with the selected payment method
     setSelectedPaymentMethod(paymentMethod);
     setModalVisible(false);
     alert(`Compra realizada com sucesso! Método de pagamento: ${paymentMethod}`);
@@ -51,7 +52,7 @@ const OrderSummaryScreen = () => {
         </TouchableOpacity>
       </View>
       
-      {/* Modal de métodos de pagamento */}
+      {/* Modal for payment methods */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   purchaseButton: {
-    backgroundColor: '#228B22', // Cor verde escuro
+    backgroundColor: '#228B22', // Dark green color
     borderRadius: 10,
     width: 150,
     height: 50,
@@ -194,12 +195,12 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   selectedButton: {
-    backgroundColor: '#006400', // Verde mais escuro quando selecionado
+    backgroundColor: '#006400', // Darker green when selected
     borderWidth: 2,
-    borderColor: '#FFD700', // Borda dourada
+    borderColor: '#FFD700', // Gold border
   },
   purchaseButtonText: {
-    color: '#fff', // Cor do texto em branco
+    color: '#fff', // White text color
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',

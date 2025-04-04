@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// LoginForm component handles user login and registration
 const LoginForm = ({ onLogin, onRegister, onForgotPassword, onCustomerService }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Function to handle user registration
   const handleRegister = async () => {
     try {
       const userData = { email, password };
@@ -19,6 +21,7 @@ const LoginForm = ({ onLogin, onRegister, onForgotPassword, onCustomerService })
     }
   };
 
+  // Function to handle user login
   const handleLogin = async () => {
     try {
       const userData = await AsyncStorage.getItem(email);
@@ -92,11 +95,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: 'red', // Cor do botão de login
+    backgroundColor: 'red', // Color of the login button
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 20, // Espaço entre os botões
+    marginBottom: 20, // Space between buttons
   },
   buttonText: {
     color: '#fff',
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   linkText: {
-    color: 'red', // Cor dos links
+    color: 'red', // Color of the links
     fontSize: 16,
     fontWeight: 'bold',
   },

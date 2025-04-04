@@ -1,7 +1,10 @@
+// This file defines the Person model using Sequelize, which represents the 'person' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const moment = require('moment');
 
+// Define the Person model
 const Person = sequelize.define('Person', {
   id_pessoa: {
     type: DataTypes.INTEGER,
@@ -91,11 +94,11 @@ const Person = sequelize.define('Person', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'person',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'person', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Person;

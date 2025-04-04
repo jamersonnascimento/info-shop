@@ -2,21 +2,21 @@ module.exports = (app) => {
   const orderItemController = require('../controllers/orderItem.controller');
   const router = require('express').Router();
 
-  // Rotas para operações em itens de pedido
+  // Routes for order item operations
   router.route('/')
-    .post(orderItemController.create)    // Criar item no pedido
-    .get(orderItemController.findAll);   // Listar todos com paginação
+    .post(orderItemController.create)    // Create order item
+    .get(orderItemController.findAll);   // List all with pagination
 
   router.route('/:id')
-    .get(orderItemController.findOne)        // Buscar por ID
-    .patch(orderItemController.updateQuantity) // Atualizar quantidade
-    .delete(orderItemController.delete);     // Deletar
+    .get(orderItemController.findOne)        // Find by ID
+    .patch(orderItemController.updateQuantity) // Update quantity
+    .delete(orderItemController.delete);     // Delete
 
-  // Rotas específicas para operações em itens de um pedido específico
+  // Specific routes for operations on items of a specific order
   router.route('/order/:id_pedido')
-    .get(orderItemController.findAllByOrder)     // Listar itens de um pedido
-    .delete(orderItemController.deleteAllByOrder); // Deletar todos os itens de um pedido
+    .get(orderItemController.findAllByOrder)     // List items of an order
+    .delete(orderItemController.deleteAllByOrder); // Delete all items of an order
 
-  // Prefixo base para todas as rotas de OrderItem
+  // Base prefix for all OrderItem routes
   app.use('/api/order-items', router);
 };

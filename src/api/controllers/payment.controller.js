@@ -1,10 +1,12 @@
-// payment.controller.js
+// This file contains controller functions for managing payments in the application.
+// It includes operations such as creating, retrieving, updating, and deleting payments.
+
 const db = require('../models');
 const Payment = db.Payment;
 const Order = db.Order;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Payment and Order
 const PAYMENT_ATTRIBUTES = [
   'id_pagamento',
   'id_pedido',
@@ -19,22 +21,22 @@ const PAYMENT_ATTRIBUTES = [
 const ORDER_ATTRIBUTES = [
   'id_pedido',
   'status',
-  'total'  // Agora usando o nome correto do campo
+  'total'
 ];
 
-// Criar um novo Pagamento
+// Create a new Payment
 exports.create = async (req, res) => {
   try {
-    const { id_pedido, metodo } = req.body; // Removemos valor do destructuring
+    const { id_pedido, metodo } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_pedido || !metodo) {
       return res.status(400).json({ 
         message: 'Os campos id_pedido e metodo são obrigatórios.' 
       });
     }
 
-    // Verifica se o pedido existe e pega seu valor total
+    // Check if the order exists and get its total value
     const order = await Order.findByPk(id_pedido);
     if (!order) {
       return res.status(404).json({ 
@@ -42,7 +44,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se já existe pagamento para este pedido
+    // Check if a payment already exists for this order
     const existingPayment = await Payment.findOne({
       where: { id_pedido }
     });
@@ -53,7 +55,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Validação do método de pagamento
+    // Validate the payment method
     const metodosValidos = ['cartao_credito', 'cartao_debito', 'pix', 'boleto'];
     if (!metodosValidos.includes(metodo)) {
       return res.status(400).json({ 
@@ -61,16 +63,16 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Criação do Pagamento usando o total do pedido
+    // Create the Payment using the order's total value
     const payment = await Payment.create({ 
       id_pedido,
-      valor: order.total, // Usa o valor total do pedido
+      valor: order.total,
       metodo,
       status: 'pendente',
       data_pagamento: null
     });
 
-    // Busca o pagamento criado com os atributos ordenados
+    // Retrieve the created payment with ordered attributes
     const newPayment = await Payment.findByPk(payment.id_pagamento, {
       attributes: PAYMENT_ATTRIBUTES,
       include: [{
@@ -92,7 +94,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar todos os Pagamentos com paginação
+// Retrieve all Payments with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -106,7 +108,7 @@ exports.findAll = async (req, res) => {
 
     const offset = (page - 1) * limit;
 
-    // Construção do where dinâmico
+    // Build dynamic where clause
     const where = {};
     if (status) where.status = status;
     if (metodo) where.metodo = metodo;
@@ -138,7 +140,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Buscar um Pagamento pelo ID
+// Retrieve a Payment by ID
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -169,7 +171,7 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Atualizar um Pagamento
+// Update a Payment
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
@@ -183,7 +185,7 @@ exports.update = async (req, res) => {
       });
     }
 
-    // Validação do status
+    // Validate the status
     const statusValidos = ['pendente', 'aprovado', 'recusado', 'cancelado'];
     if (status && !statusValidos.includes(status)) {
       return res.status(400).json({ 
@@ -191,14 +193,14 @@ exports.update = async (req, res) => {
       });
     }
 
-    // Atualização do Pagamento
+    // Update the Payment
     await payment.update({
       status: status || payment.status,
       data_pagamento: data_pagamento || payment.data_pagamento,
       atualizado_em: new Date()
     });
 
-    // Busca o pagamento atualizado
+    // Retrieve the updated payment
     const updatedPayment = await Payment.findByPk(id, {
       attributes: PAYMENT_ATTRIBUTES,
       include: [{
@@ -220,7 +222,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// Deletar um Pagamento
+// Delete a Payment
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -233,7 +235,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o pagamento pode ser deletado
+    // Check if the payment can be deleted
     if (payment.status === 'aprovado') {
       return res.status(400).json({ 
         message: 'Não é possível deletar um pagamento aprovado.' 

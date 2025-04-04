@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
+// SearchBar component provides a text input for searching
 const SearchBar = ({ value, onChangeText }) => {
   return (
     <View style={styles.searchContainer}>
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: 'gray',
-    borderRadius: 10,  // Arredonda os cantos
+    borderRadius: 10,  // Rounds the corners
     marginBottom: 16,
     marginTop: 45,
     marginRight: 75,

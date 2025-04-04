@@ -2,25 +2,25 @@ module.exports = (app) => {
     const categoryController = require('../controllers/category.controller');
     const router = require('express').Router();
   
-    // Rotas para operações em massa
+    // Routes for bulk operations
     router.route('/')
-        .post(categoryController.create)    // Criar categoria
-        .get(categoryController.findAll);   // Listar todas com paginação e filtros
+        .post(categoryController.create)    // Create category
+        .get(categoryController.findAll);   // List all with pagination and filters
   
-    // Rotas para operações específicas
+    // Routes for specific operations
     router.route('/:id')
-        .get(categoryController.findOne)    // Buscar por ID
-        .put(categoryController.update)     // Atualizar
-        .delete(categoryController.delete); // Deletar
+        .get(categoryController.findOne)    // Find by ID
+        .put(categoryController.update)     // Update
+        .delete(categoryController.delete); // Delete
   
-    // Rotas para gerenciar relação entre categorias e produtos
+    // Routes to manage the relationship between categories and products
     router.route('/:categoryId/products')
-        .get(categoryController.findProducts)  // Listar produtos de uma categoria
-        .post(categoryController.addProduct);  // Adicionar produto a uma categoria
+        .get(categoryController.findProducts)  // List products of a category
+        .post(categoryController.addProduct);  // Add product to a category
   
     router.route('/:categoryId/products/:productId')
-        .delete(categoryController.removeProduct); // Remover produto de uma categoria
+        .delete(categoryController.removeProduct); // Remove product from a category
   
-    // Prefixo base para todas as rotas de Categoria
+    // Base prefix for all Category routes
     app.use('/api/categories', router);
 };

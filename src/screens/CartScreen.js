@@ -6,6 +6,7 @@ import CartItem from '../components/CartItem';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 
+// CartScreen component displays the shopping cart interface
 const CartScreen = ({ navigation }) => {
   const { cartItems, clearCart, removeFromCart, updateQuantity } = useContext(CartContext);
 
@@ -19,10 +20,10 @@ const CartScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Título em destaque */}
+      {/* Title */}
       <Text style={styles.title}>Seu carrinho de compras</Text>
 
-      {/* Mensagem de Carrinho Vazio ou Lista de Itens */}
+      {/* Empty Cart Message or List of Items */}
       {cartItems.length === 0 ? (
         <EmptyCartMessage onExplore={handleExplore} />
       ) : (
@@ -37,12 +38,12 @@ const CartScreen = ({ navigation }) => {
               />
             )}
             keyExtractor={item => item.id}
-            contentContainerStyle={styles.flatListContent} // Adiciona espaçamento interno
+            contentContainerStyle={styles.flatListContent} // Adds internal spacing
           />
         </View>
       )}
 
-      {/* Resumo do Pedido e Botão para limpar o carrinho */}
+      {/* Order Summary and Clear Cart Button */}
       {cartItems.length > 0 && (
         <View style={styles.footerContainer}>
           <TouchableOpacity style={styles.summaryContainer} onPress={handleSummary}>
@@ -66,36 +67,36 @@ const CartScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 0, // Mantém o padding 0 para o BottomNavigation ficar alinhado
-    backgroundColor: '#F6ECDA',
+    padding: 0, // Keeps padding 0 for BottomNavigation alignment
+    backgroundColor: '#F6ECDA', // Background color
   },
   title: {
-    fontSize: 28, // Aumentar o tamanho da fonte
+    fontSize: 28, // Increase font size
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
-    marginTop: 50, // Adicionar margem superior para afastar do topo da tela
+    marginTop: 50, // Add top margin to move away from the top of the screen
     color: '#333',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)', // Adicionando sombra ao texto
+    textShadowColor: 'rgba(0, 0, 0, 0.3)', // Adding shadow to text
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
   },
   scrollContainer: {
     flex: 1,
-    marginHorizontal: 16, // Adiciona margem lateral para o scrollContainer
+    marginHorizontal: 16, // Adds lateral margin to scrollContainer
   },
   flatListContent: {
-    paddingVertical: 16, // Adiciona espaçamento interno vertical
+    paddingVertical: 16, // Adds internal vertical spacing
   },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    marginBottom: 80, // Ajuste para a BottomNavigation
+    marginBottom: 80, // Adjustment for BottomNavigation
   },
   summaryContainer: {
-    backgroundColor: '#228B22',  // Cor verde escuro em hexadecimal
+    backgroundColor: '#228B22',  // Dark green color in hexadecimal
     padding: 16,
     borderRadius: 10,
     shadowColor: '#000',
@@ -109,27 +110,27 @@ const styles = StyleSheet.create({
   summaryText: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#fff', // Cor do texto em branco
+    color: '#fff', // White text color
     textAlign: 'center',
   },
   clearButton: {
-    backgroundColor: '#ff6347', // Fundo vermelho tomate
+    backgroundColor: '#ff6347', // Tomato red background
     borderRadius: 10,
     width: 150,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
-    flexDirection: 'row', // Mantém ícone e texto na mesma linha
+    flexDirection: 'row', // Keeps icon and text on the same line
     paddingHorizontal: 10,
   },
   clearButtonContent: {
-    flexDirection: 'row', // Mantém ícone e texto na mesma linha
+    flexDirection: 'row', // Keeps icon and text on the same line
     alignItems: 'center',
   },
   clearButtonText: {
     marginLeft: 5,
-    color: '#fff', // Cor do texto em branco
+    color: '#fff', // White text color
     fontWeight: 'bold',
   },
   cartItemContainer: {

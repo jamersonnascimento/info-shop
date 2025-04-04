@@ -9,6 +9,7 @@ import ProductImage from '../components/ProductImage';
 import { productsData } from '../data/products';
 import { getProductImage } from '../utils/productImageMapper';
 
+// HomeScreen component displays featured product offers
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { addToCart } = useContext(CartContext);
@@ -18,23 +19,23 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Função para buscar produtos da API
+  // Function to fetch products from the API
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const response = await api.get('/products');
       
-      // Transformar os dados da API para o formato esperado pelo app
-      const offerProductIds = ['1', '2', '3']; // IDs dos produtos que você quer colocar em oferta
+      // Transform API data to the format expected by the app
+      const offerProductIds = ['1', '2', '3']; // IDs of products to be featured as offers
       
       const formattedProducts = response.data.data.map(product => {
-        // Formatar preços
+        // Format prices
         let precoFormatado = 'Preço indisponível';
         let precoDesconto = 'Preço indisponível';
         let precoParcelas = 'Preço indisponível';
         
         if (product.preco !== undefined && product.preco !== null) {
-          // Converter para número se for string
+          // Convert to number if it's a string
           const precoNumerico = typeof product.preco === 'string' ? 
             parseFloat(product.preco.replace(',', '.')) : 
             Number(product.preco);
@@ -46,11 +47,11 @@ const HomeScreen = () => {
           }
         }
         
-        // Usar imagem local mapeada se disponível
+        // Use mapped local image if available
         const productImage = getProductImage(product.id_produto) || 'https://via.placeholder.com/500x500?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
         
-        // Definir lógica para ofertas
-        const isOffer = offerProductIds.includes(product.id_produto.toString()); // Produtos com IDs específicos são ofertas
+        // Define logic for offers
+        const isOffer = offerProductIds.includes(product.id_produto.toString()); // Specific product IDs are offers
         
         return {
           id: product.id_produto.toString(),
@@ -62,17 +63,17 @@ const HomeScreen = () => {
           imageUrl: productImage,
           category: product.categoria || 'Categoria Padrão',
           description: product.descricao,
-          isOffer: isOffer // Adicionando propriedade isOffer
+          isOffer: isOffer // Adding isOffer property
         };
       });
       
       setProducts(formattedProducts);
-      setFilteredProducts(formattedProducts.filter(product => product.isOffer)); // Filtrar apenas ofertas
+      setFilteredProducts(formattedProducts.filter(product => product.isOffer)); // Filter only offers
       setError(null);
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
       setError('Não foi possível carregar os produtos. Tente novamente mais tarde.');
-      // Usar os dados locais de produtos como fallback em caso de erro
+      // Use local product data as fallback in case of error
       console.log('Usando dados locais de produtos como fallback');
       setProducts(productsData);
       setFilteredProducts(productsData);
@@ -81,7 +82,7 @@ const HomeScreen = () => {
     }
   };
 
-  // Carregar produtos quando o componente montar
+  // Load products when the component mounts
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -110,7 +111,7 @@ const HomeScreen = () => {
       </View>
       <Text style={styles.title}>Ofertas em Destaques!</Text>
       
-      {/* Exibir mensagem de erro se houver */}
+      {/* Display error message if any */}
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>

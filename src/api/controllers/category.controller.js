@@ -1,9 +1,12 @@
+// This file contains controller functions for managing categories in the application.
+// It includes operations such as creating, retrieving, updating, and deleting categories, as well as managing products within categories.
+
 const db = require('../models');
 const Category = db.Category;
 const Product = db.Product;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Category
 const CATEGORY_ATTRIBUTES = [
   'id_categoria',
   'nome',
@@ -12,17 +15,17 @@ const CATEGORY_ATTRIBUTES = [
   'atualizado_em'
 ];
 
-// Criar uma nova Categoria
+// Create a new Category
 exports.create = async (req, res) => {
   try {
     const { nome, descricao } = req.body;
 
-    // Validações mais robustas
+    // Validate required fields
     if (!nome?.trim()) {
       return res.status(400).json({ message: 'Nome da categoria é obrigatório e não pode estar vazio' });
     }
 
-    // Criação da Categoria
+    // Create the Category
     const category = await Category.create({ 
       nome,
       descricao
@@ -40,7 +43,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar todas as Categorias com paginação
+// Retrieve all Categories with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -84,7 +87,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Buscar uma Categoria por ID
+// Retrieve a Category by ID
 exports.findOne = async (req, res) => {
   try {
     const id = req.params.id;
@@ -106,13 +109,13 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Atualizar uma Categoria
+// Update a Category
 exports.update = async (req, res) => {
   try {
     const id = req.params.id;
     const { nome, descricao } = req.body;
 
-    // Validações
+    // Validate required fields
     if (!nome?.trim()) {
       return res.status(400).json({ message: 'Nome da categoria é obrigatório e não pode estar vazio' });
     }
@@ -123,7 +126,7 @@ exports.update = async (req, res) => {
       return res.status(404).json({ message: 'Categoria não encontrada' });
     }
 
-    // Atualização da categoria
+    // Update the category
     await category.update({
       nome,
       descricao
@@ -141,7 +144,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// Deletar uma Categoria
+// Delete a Category
 exports.delete = async (req, res) => {
   try {
     const id = req.params.id;
@@ -157,14 +160,14 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ message: 'Categoria não encontrada' });
     }
 
-    // Verifica se a categoria possui produtos associados
+    // Check if the category has associated products
     if (category.products && category.products.length > 0) {
       return res.status(400).json({ 
         message: 'Não é possível excluir a categoria pois existem produtos associados a ela' 
       });
     }
 
-    // Deleta a categoria
+    // Delete the category
     await category.destroy();
 
     res.status(200).json({
@@ -178,7 +181,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Adicionar produto a uma categoria
+// Add a product to a category
 exports.addProduct = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
@@ -198,7 +201,7 @@ exports.addProduct = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
-    // Verifica se o produto já está associado a alguma categoria
+    // Check if the product is already associated with a category
     const existingCategories = await product.getCategories();
     if (existingCategories && existingCategories.length > 0) {
       return res.status(400).json({ 
@@ -227,7 +230,7 @@ exports.addProduct = async (req, res) => {
   }
 };
 
-// Remover produto de uma categoria
+// Remove a product from a category
 exports.removeProduct = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
@@ -260,13 +263,13 @@ exports.removeProduct = async (req, res) => {
   }
 };
 
-// Listar produtos de uma categoria
+// List products in a category
 exports.findProducts = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
     const { 
       page = 1, 
-      limit = 1000 // Definir um limite alto para garantir que todos os produtos sejam retornados
+      limit = 1000 // Set a high limit to ensure all products are returned
     } = req.query;
 
     const offset = (page - 1) * limit;
@@ -276,11 +279,11 @@ exports.findProducts = async (req, res) => {
       return res.status(404).json({ message: 'Categoria não encontrada' });
     }
 
-    // Busca produtos associados à categoria com paginação
+    // Retrieve products associated with the category with pagination
     const products = await category.getProducts({
       limit: parseInt(limit),
       offset: parseInt(offset),
-      joinTableAttributes: [], // Não retorna atributos da tabela de junção
+      joinTableAttributes: [], // Do not return attributes from the join table
       attributes: [
         'id_produto',
         'nome',
@@ -292,7 +295,7 @@ exports.findProducts = async (req, res) => {
       ]
     });
 
-    // Conta o total de produtos associados à categoria (sem paginação)
+    // Count the total number of products associated with the category (without pagination)
     const count = await category.countProducts();
 
     res.status(200).json({

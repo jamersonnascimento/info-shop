@@ -2,21 +2,21 @@ module.exports = (app) => {
     const addressController = require('../controllers/address.controller');
     const router = require('express').Router();
   
-    // Rotas para operações em massa
+    // Routes for bulk operations
     router.route('/')
-        .post(addressController.create)    // Criar endereço
-        .get(addressController.findAll);   // Listar todos com paginação
+        .post(addressController.create)    // Create address
+        .get(addressController.findAll);   // List all with pagination
 
-    // Rotas para operações específicas
+    // Routes for specific operations
     router.route('/:id')
-        .get(addressController.findOne)    // Buscar por ID
-        .put(addressController.update)     // Atualizar
-        .delete(addressController.delete); // Deletar
+        .get(addressController.findOne)    // Find by ID
+        .put(addressController.update)     // Update
+        .delete(addressController.delete); // Delete
 
-    // Rota para buscar endereços por cliente
+    // Route to find addresses by client
     router.route('/client/:id_cliente')
-        .get(addressController.findAllByClient); // Listar endereços de um cliente
+        .get(addressController.findAllByClient); // List addresses of a client
   
-    // Prefixo base para todas as rotas de Endereço
+    // Base prefix for all Address routes
     app.use('/api/addresses', router);
 };

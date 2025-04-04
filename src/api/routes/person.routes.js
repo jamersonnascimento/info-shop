@@ -2,18 +2,18 @@ module.exports = (app) => {
     const personController = require('../controllers/person.controller');
     const router = require('express').Router();
   
-    // Rotas para operações em massa
+    // Routes for bulk operations
     router.route('/')
-        .post(personController.create)    // Criar pessoa
-        .get(personController.findAll)   // Listar todas
-        .delete(personController.deleteAll); // Deletar todas (apenas em desenvolvimento)
+        .post(personController.create)    // Create person
+        .get(personController.findAll)   // List all
+        .delete(personController.deleteAll); // Delete all (development only)
   
-    // Rotas para operações específicas
+    // Routes for specific operations
     router.route('/:id')
-        .get(personController.findOne)    // Buscar por ID
-        .put(personController.update)     // Atualizar
-        .delete(personController.delete); // Deletar
+        .get(personController.findOne)    // Find by ID
+        .put(personController.update)     // Update
+        .delete(personController.delete); // Delete
   
-    // Prefixo base para todas as rotas de Pessoa (no plural)
+    // Base prefix for all Person routes (in plural)
     app.use('/api/persons', router);
 };

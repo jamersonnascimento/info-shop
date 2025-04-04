@@ -1,6 +1,9 @@
+// This file defines the Address model using Sequelize, which represents the 'address' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 
+// Define the Address model
 const Address = sequelize.define('Address', {
   id_endereco: {
     type: DataTypes.INTEGER,
@@ -12,7 +15,7 @@ const Address = sequelize.define('Address', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'client',
+      model: 'client', // References the 'client' table
       key: 'id_cliente'
     }
   },
@@ -107,11 +110,11 @@ const Address = sequelize.define('Address', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'address',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'address', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Address;

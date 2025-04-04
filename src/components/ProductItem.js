@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import ProductImage from './ProductImage';
 
+// ProductItem component displays a product with its image and details
 const ProductItem = ({ item }) => {
   return (
     <View style={styles.productCard}>
@@ -10,7 +11,7 @@ const ProductItem = ({ item }) => {
           source={item.image || item.imageUrl} 
           fallbackUrl={item.imageUrl} 
           style={styles.productImage} 
-          productId={item.id} // Adicionando o ID do produto para buscar imagem local
+          productId={item.id} // Adding the product ID to fetch local image
         />
         <View style={styles.productInfo}>
           <Text style={styles.productName}>{item.name}</Text>

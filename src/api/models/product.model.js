@@ -1,7 +1,9 @@
-//teste para github
+// This file defines the Product model using Sequelize, which represents the 'product' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 
+// Define the Product model
 const Product = sequelize.define('Product', {
   id_produto: {
     type: DataTypes.INTEGER,
@@ -58,11 +60,11 @@ const Product = sequelize.define('Product', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'product',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'product', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Product;

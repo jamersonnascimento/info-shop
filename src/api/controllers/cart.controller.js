@@ -1,10 +1,13 @@
+// This file contains controller functions for managing carts in the application.
+// It includes operations such as creating, retrieving, updating, and deleting carts.
+
 const db = require('../models');
 const Cart = db.Cart;
 const Client = db.Client;
 const Person = db.Person;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Cart, Client, and Person
 const CART_ATTRIBUTES = [
   'id_carrinho',
   'id_cliente',
@@ -23,19 +26,19 @@ const PERSON_ATTRIBUTES = [
   'telefone'
 ];
 
-// Criar um novo Carrinho
+// Create a new Cart
 exports.create = async (req, res) => {
   try {
     const { id_cliente } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_cliente) {
       return res.status(400).json({ 
         message: 'ID do cliente é obrigatório.' 
       });
     }
 
-    // Verifica se o cliente existe e já traz os dados da pessoa
+    // Check if the client exists and include person information
     const client = await Client.findByPk(id_cliente, {
       include: [{
         model: Person,
@@ -50,7 +53,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o cliente já tem um carrinho
+    // Check if the client already has a cart
     const existingCart = await Cart.findOne({
       where: { id_cliente }
     });
@@ -61,13 +64,13 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Criação do Carrinho
+    // Create the Cart
     const cart = await Cart.create({ 
       id_cliente,
       status: 'ativo'
     });
 
-    // Busca o carrinho criado com todas as relações
+    // Retrieve the created cart with all relations
     const createdCart = await Cart.findByPk(cart.id_carrinho, {
       include: [{
         model: Client,
@@ -93,7 +96,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar um Carrinho específico
+// Retrieve a specific Cart
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -112,7 +115,7 @@ exports.findOne = async (req, res) => {
       }
     ];
 
-    // Incluir itens do carrinho se solicitado
+    // Include cart items if requested
     if (includeItems === 'true') {
       includes.push({
         model: db.CartItem,
@@ -147,7 +150,7 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Buscar todos os Carrinhos com paginação
+// Retrieve all Carts with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -193,7 +196,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Atualizar status do Carrinho
+// Update Cart status
 exports.updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -239,7 +242,7 @@ exports.updateStatus = async (req, res) => {
   }
 };
 
-// Deletar um Carrinho
+// Delete a Cart
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -251,7 +254,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está finalizado
+    // Check if the cart is finalized
     if (cart.status === 'finalizado') {
       return res.status(403).json({ 
         message: 'Não é possível excluir um carrinho finalizado.' 

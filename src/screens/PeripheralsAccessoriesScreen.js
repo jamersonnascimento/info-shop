@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 
+// PeripheralsAccessoriesScreen component displays a list of peripherals and accessories
 const PeripheralsAccessoriesScreen = ({ route }) => {
   const navigation = useNavigation();
   const { categoryName } = route.params;
@@ -40,7 +41,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
   };
 
   const handlePurchase = () => {
-    // Um alert para o botão addToCart
+    // Alert for the addToCart button
     alert('Produto adicionado ao carrinho!');
   };
 
@@ -83,7 +84,7 @@ const PeripheralsAccessoriesScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6ECDA',  // Fundo mais claro para melhor contraste com os cards
+    backgroundColor: '#F6ECDA',  // Lighter background for better contrast with the cards
     padding: 0,
   },
   header: {
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButton: {
-    backgroundColor: '#228B22', // Cor verde
+    backgroundColor: '#228B22', // Green color
     paddingVertical: 10,
     borderRadius: 8,
     marginTop: 10,
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   contentContainer: {
-    paddingBottom: 80, // Aumentado para dar espaço ao BottomNavigation
+    paddingBottom: 80, // Increased to give space to BottomNavigation
   },
 });
 

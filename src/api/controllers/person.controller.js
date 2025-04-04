@@ -1,10 +1,13 @@
+// This file contains controller functions for managing persons in the application.
+// It includes operations such as creating, retrieving, updating, and deleting persons.
+
 const db = require('../models');
 const Person = db.Person;
 const Client = db.Client;
 const Address = db.Address;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Person, Client, and Address
 const PERSON_ATTRIBUTES = [
   'id_pessoa',
   'nome',
@@ -33,7 +36,7 @@ const ADDRESS_ATTRIBUTES = [
   'cep'
 ];
 
-// Função auxiliar para converter data
+// Helper function to convert date format
 const convertDateFormat = (dateStr) => {
   const brFormat = /^(\d{2})\/(\d{2})\/(\d{4})$/;
   
@@ -44,12 +47,12 @@ const convertDateFormat = (dateStr) => {
   return dateStr;
 };
 
-// Criar uma nova Pessoa
+// Create a new Person
 exports.create = async (req, res) => {
   try {
     const { nome, cpf, email, telefone, data_nasc } = req.body;
 
-    // Validações detalhadas
+    // Detailed validations
     if (!nome || nome.length < 2) {
       return res.status(400).json({ 
         message: 'Nome inválido. Mínimo de 2 caracteres.' 
@@ -74,7 +77,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Converte e valida a data
+    // Convert and validate the date
     const dataFormatada = convertDateFormat(data_nasc);
     const dataNascDate = new Date(dataFormatada);
     
@@ -84,7 +87,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se CPF ou email já existem
+    // Check if CPF or email already exists
     const existingPerson = await Person.findOne({
       where: {
         [Op.or]: [{ cpf }, { email }]
@@ -97,7 +100,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Criação da Pessoa
+    // Create the Person
     const person = await Person.create({ 
       nome, 
       cpf, 
@@ -106,7 +109,7 @@ exports.create = async (req, res) => {
       data_nasc: dataFormatada 
     });
 
-    // Busca a pessoa criada com os atributos ordenados
+    // Retrieve the created person with ordered attributes
     const newPerson = await Person.findByPk(person.id_pessoa, {
       attributes: PERSON_ATTRIBUTES
     });
@@ -123,7 +126,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar todas as Pessoas com paginação
+// Retrieve all Persons with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -149,8 +152,8 @@ exports.findAll = async (req, res) => {
       limit: parseInt(limit),
       offset: parseInt(offset),
       order: [[sortBy, order]],
-      raw: true, // Adiciona esta linha
-      nest: true, // E esta linha
+      raw: true,
+      nest: true,
       attributes: PERSON_ATTRIBUTES,
       include: [{
         model: Client,
@@ -164,7 +167,7 @@ exports.findAll = async (req, res) => {
       }]
     });
 
-    // Reorganiza os dados antes de enviar
+    // Reorganize the data before sending
     const formattedRows = rows.map(row => {
       const { id_pessoa, nome, cpf, email, telefone, data_nasc, criado_em, atualizado_em, ...rest } = row;
       return {
@@ -194,7 +197,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Buscar uma Pessoa pelo ID
+// Retrieve a Person by ID
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -221,7 +224,7 @@ exports.findOne = async (req, res) => {
       });
     }
 
-    // Reorganiza os dados
+    // Reorganize the data
     const { id_pessoa, nome, cpf, email, telefone, data_nasc, criado_em, atualizado_em, ...rest } = person;
     const formattedPerson = {
       id_pessoa,
@@ -244,13 +247,13 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Atualizar uma Pessoa pelo ID
+// Update a Person by ID
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Se houver data_nasc, converte para o formato correto
+    // If there is data_nasc, convert to the correct format
     if (updateData.data_nasc) {
       const dataFormatada = convertDateFormat(updateData.data_nasc);
       const dataNascDate = new Date(dataFormatada);
@@ -329,7 +332,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// Deletar uma Pessoa pelo ID (Soft Delete)
+// Delete a Person by ID (Soft Delete)
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -373,7 +376,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Deletar todas as Pessoas (Apenas em desenvolvimento)
+// Delete all Persons (Development only)
 exports.deleteAll = async (req, res) => {
   if (process.env.NODE_ENV === 'production') {
     return res.status(403).json({ 

@@ -14,9 +14,9 @@ const Client = sequelize.define('Client', {
   id_pessoa: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true, // Garante que uma pessoa só pode ter um cliente
+    unique: true, // Ensures that a person can only have one client
     references: {
-      model: Person,
+      model: Person, // References the Person model
       key: 'id_pessoa'
     }
   },
@@ -35,11 +35,11 @@ const Client = sequelize.define('Client', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'client',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'client', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Client;

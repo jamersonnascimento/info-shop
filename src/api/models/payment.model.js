@@ -1,8 +1,10 @@
-//payment.model.js
+// This file defines the Payment model using Sequelize, which represents the 'payment' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Order = require('./order.model');
 
+// Define the Payment model
 const Payment = sequelize.define('Payment', {
   id_pagamento: {
     type: DataTypes.INTEGER,
@@ -13,9 +15,9 @@ const Payment = sequelize.define('Payment', {
   id_pedido: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true, // Garante relação 1:1 com Order
+    unique: true, // Ensures a 1:1 relationship with Order
     references: {
-      model: Order,
+      model: Order, // References the Order model
       key: 'id_pedido'
     },
     validate: {
@@ -42,31 +44,31 @@ const Payment = sequelize.define('Payment', {
   status: {
     type: DataTypes.ENUM('pendente', 'aprovado', 'recusado', 'estornado'),
     allowNull: false,
-    defaultValue: 'pendente', // Sempre começa como pendente
+    defaultValue: 'pendente', // Always starts as pending
     validate: {
       notNull: { msg: 'Status é obrigatório' }
     }
   },
   data_pagamento: {
     type: DataTypes.DATE,
-    allowNull: true, // Só é preenchido quando o pagamento é aprovado
+    allowNull: true, // Only filled when payment is approved
   },
   criado_em: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW // Timestamp automático
+    defaultValue: DataTypes.NOW // Automatic timestamp
   },
   atualizado_em: {
     type: DataTypes.DATE,
-    allowNull: false, // Podemos voltar para false
-    defaultValue: DataTypes.NOW // Timestamp automático
+    allowNull: false,
+    defaultValue: DataTypes.NOW // Automatic timestamp
   }
 }, {
-  tableName: 'payment',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'payment', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Payment;

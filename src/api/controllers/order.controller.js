@@ -1,3 +1,6 @@
+// This file contains controller functions for managing orders in the application.
+// It includes operations such as creating, retrieving, updating, and deleting orders.
+
 const db = require('../models');
 const Order = db.Order;
 const OrderItem = db.OrderItem;
@@ -8,7 +11,7 @@ const Cart = db.Cart;
 const CartItem = db.CartItem;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Order, Client, Person, OrderItem, and Product
 const ORDER_ATTRIBUTES = [
   'id_pedido',
   'id_cliente',
@@ -49,19 +52,19 @@ const PRODUCT_ATTRIBUTES = [
   'estoque'
 ];
 
-// Criar um novo Pedido
+// Create a new Order
 exports.create = async (req, res) => {
   try {
     const { id_cliente } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_cliente) {
       return res.status(400).json({ 
         message: 'ID do cliente é obrigatório.' 
       });
     }
 
-    // Verifica se o cliente existe e já traz os dados da pessoa
+    // Check if the client exists and include person information
     const client = await Client.findByPk(id_cliente, {
       include: [{
         model: Person,
@@ -76,14 +79,14 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Criação do Pedido
+    // Create the Order
     const order = await Order.create({ 
       id_cliente,
       status: 'pendente',
       total: 0.00
     });
 
-    // Retorna apenas o pedido criado sem incluir relações
+    // Return only the created order without including relations
     res.status(201).json({
       message: 'Pedido criado com sucesso!',
       data: order
@@ -96,21 +99,21 @@ exports.create = async (req, res) => {
   }
 };
 
-// Criar um pedido a partir de um carrinho
+// Create an order from a cart
 exports.createFromCart = async (req, res) => {
   const transaction = await db.sequelize.transaction();
   
   try {
     const { id_carrinho } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_carrinho) {
       return res.status(400).json({ 
         message: 'ID do carrinho é obrigatório.' 
       });
     }
 
-    // Verifica se o carrinho existe
+    // Check if the cart exists
     const cart = await Cart.findByPk(id_carrinho, {
       include: [{
         model: Client,
@@ -124,14 +127,14 @@ exports.createFromCart = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está ativo
+    // Check if the cart is active
     if (cart.status !== 'ativo') {
       return res.status(403).json({ 
         message: `Não é possível criar pedido a partir de um carrinho ${cart.status}.` 
       });
     }
 
-    // Busca os itens do carrinho
+    // Retrieve cart items
     const cartItems = await CartItem.findAll({
       where: { id_carrinho },
       include: [{
@@ -147,7 +150,7 @@ exports.createFromCart = async (req, res) => {
       });
     }
 
-    // Verifica estoque de todos os produtos
+    // Check stock for all products
     for (const item of cartItems) {
       if (item.quantidade > item.product.estoque) {
         return res.status(400).json({ 
@@ -156,29 +159,29 @@ exports.createFromCart = async (req, res) => {
       }
     }
 
-    // Cria o pedido
+    // Create the order
     const order = await Order.create({
       id_cliente: cart.id_cliente,
       status: 'pendente',
       total: 0.00
     }, { transaction });
 
-    // Calcula o total e adiciona os itens ao pedido
+    // Calculate the total and add items to the order
     let total = 0;
     for (const item of cartItems) {
       const subtotal = parseFloat(item.preco_unit) * item.quantidade;
       total += subtotal;
 
-      // Cria o item do pedido
+      // Create the order item
       await OrderItem.create({
         id_pedido: order.id_pedido,
         id_produto: item.id_produto,
         quantidade: item.quantidade,
-        preco_unit: item.preco_unit || item.product.preco, // Garante que o preço unitário seja definido
+        preco_unit: item.preco_unit || item.product.preco, // Ensure unit price is set
         subtotal: subtotal
       }, { transaction });
 
-      // Atualiza o estoque do produto
+      // Update product stock
       await Product.update({
         estoque: item.product.estoque - item.quantidade
       }, { 
@@ -187,20 +190,20 @@ exports.createFromCart = async (req, res) => {
       });
     }
 
-    // Atualiza o total do pedido
+    // Update the order total
     await order.update({ total }, { transaction });
 
-    // Atualiza o status do carrinho para 'finalizado'
+    // Update cart status to 'finalizado'
     await cart.update({ status: 'finalizado' }, { transaction });
 
-    // Commit da transação
+    // Commit the transaction
     await transaction.commit();
 
-    // Busca o pedido criado com todas as relações
+    // Retrieve the created order with all relations
     const createdOrder = await Order.findByPk(order.id_pedido, {
       include: [{
         model: Client,
-        as: 'client',  // Alterado de 'clientInfo' para 'client'
+        as: 'client',  // Changed from 'clientInfo' to 'client'
         attributes: CLIENT_ATTRIBUTES,
         include: [{
           model: Person,
@@ -215,7 +218,7 @@ exports.createFromCart = async (req, res) => {
       data: createdOrder
     });
   } catch (error) {
-    // Rollback em caso de erro
+    // Rollback in case of error
     await transaction.rollback();
     
     res.status(500).json({ 
@@ -225,7 +228,7 @@ exports.createFromCart = async (req, res) => {
   }
 };
 
-// Buscar um Pedido específico
+// Retrieve a specific Order
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -274,14 +277,14 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Listar todos os Pedidos com paginação
+// List all Orders with pagination
 exports.findAll = async (req, res) => {
   try {
     const { page = 1, size = 10, status, id_cliente } = req.query;
     const limit = parseInt(size);
     const offset = (parseInt(page) - 1) * limit;
 
-    // Construir condições de filtro
+    // Build filter conditions
     const condition = {};
     if (status) condition.status = status;
     if (id_cliente) condition.id_cliente = id_cliente;
@@ -294,7 +297,7 @@ exports.findAll = async (req, res) => {
       distinct: true,
       include: [{
         model: Client,
-        as: 'client', // Alterado de 'clientInfo' para 'client'
+        as: 'client', // Changed from 'clientInfo' to 'client'
         attributes: CLIENT_ATTRIBUTES,
         include: [{
           model: Person,
@@ -320,7 +323,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Listar todos os Pedidos de um cliente
+// List all Orders of a client
 exports.findAllByClient = async (req, res) => {
   try {
     const { id_cliente } = req.params;
@@ -328,7 +331,7 @@ exports.findAllByClient = async (req, res) => {
     const limit = parseInt(size);
     const offset = (parseInt(page) - 1) * limit;
 
-    // Construir condições de filtro
+    // Build filter conditions
     const condition = { id_cliente };
     if (status) condition.status = status;
 
@@ -366,20 +369,20 @@ exports.findAllByClient = async (req, res) => {
   }
 };
 
-// Atualizar o status de um Pedido
+// Update the status of an Order
 exports.updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    // Validações
+    // Validate required fields
     if (!status) {
       return res.status(400).json({ 
         message: 'Status é obrigatório.' 
       });
     }
 
-    // Verifica se o pedido existe
+    // Check if the order exists
     const order = await Order.findByPk(id);
     if (!order) {
       return res.status(404).json({ 
@@ -387,7 +390,7 @@ exports.updateStatus = async (req, res) => {
       });
     }
 
-    // Validar transições de status permitidas
+    // Validate allowed status transitions
     const validTransitions = {
       'pendente': ['em_processamento', 'cancelado'],
       'em_processamento': ['enviado', 'cancelado'],
@@ -402,12 +405,12 @@ exports.updateStatus = async (req, res) => {
       });
     }
 
-    // Se estiver cancelando o pedido, restaurar o estoque
+    // If canceling the order, restore stock
     if (status === 'cancelado') {
       const transaction = await db.sequelize.transaction();
       
       try {
-        // Buscar os itens do pedido
+        // Retrieve order items
         const orderItems = await OrderItem.findAll({
           where: { id_pedido: id },
           include: [{
@@ -416,7 +419,7 @@ exports.updateStatus = async (req, res) => {
           }]
         });
 
-        // Restaurar o estoque de cada produto
+        // Restore stock for each product
         for (const item of orderItems) {
           await Product.update({
             estoque: item.product.estoque + item.quantidade
@@ -426,22 +429,22 @@ exports.updateStatus = async (req, res) => {
           });
         }
 
-        // Atualizar o status do pedido
+        // Update the order status
         await order.update({ status }, { transaction });
         
-        // Commit da transação
+        // Commit the transaction
         await transaction.commit();
       } catch (error) {
-        // Rollback em caso de erro
+        // Rollback in case of error
         await transaction.rollback();
         throw error;
       }
     } else {
-      // Atualizar apenas o status
+      // Update only the status
       await order.update({ status });
     }
 
-    // Buscar o pedido atualizado
+    // Retrieve the updated order
     const updatedOrder = await Order.findByPk(id, {
       include: [
         {
@@ -479,14 +482,14 @@ exports.updateStatus = async (req, res) => {
   }
 };
 
-// Deletar um Pedido
+// Delete an Order
 exports.delete = async (req, res) => {
   const transaction = await db.sequelize.transaction();
   
   try {
     const { id } = req.params;
 
-    // Verifica se o pedido existe
+    // Check if the order exists
     const order = await Order.findByPk(id);
     if (!order) {
       return res.status(404).json({ 
@@ -494,16 +497,16 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o pedido pode ser deletado (apenas pedidos pendentes ou cancelados)
+    // Check if the order can be deleted (only pending or canceled orders)
     if (!['pendente', 'cancelado'].includes(order.status)) {
       return res.status(403).json({ 
         message: `Não é possível deletar um pedido com status '${order.status}'.` 
       });
     }
 
-    // Se o pedido estiver pendente, restaurar o estoque
+    // If the order is pending, restore stock
     if (order.status === 'pendente') {
-      // Buscar os itens do pedido
+      // Retrieve order items
       const orderItems = await OrderItem.findAll({
         where: { id_pedido: id },
         include: [{
@@ -512,7 +515,7 @@ exports.delete = async (req, res) => {
         }]
       });
 
-      // Restaurar o estoque de cada produto
+      // Restore stock for each product
       for (const item of orderItems) {
         await Product.update({
           estoque: item.product.estoque + item.quantidade
@@ -523,26 +526,26 @@ exports.delete = async (req, res) => {
       }
     }
 
-    // Deletar os itens do pedido
+    // Delete order items
     await OrderItem.destroy({
       where: { id_pedido: id },
       transaction
     });
 
-    // Deletar o pedido
+    // Delete the order
     await Order.destroy({
       where: { id_pedido: id },
       transaction
     });
 
-    // Commit da transação
+    // Commit the transaction
     await transaction.commit();
 
     res.status(200).json({
       message: 'Pedido deletado com sucesso!'
     });
   } catch (error) {
-    // Rollback em caso de erro
+    // Rollback in case of error
     await transaction.rollback();
     
     res.status(500).json({ 

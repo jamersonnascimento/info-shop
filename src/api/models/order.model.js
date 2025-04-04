@@ -1,7 +1,10 @@
+// This file defines the Order model using Sequelize, which represents the 'order' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Client = require('./client.model');
 
+// Define the Order model
 const Order = sequelize.define('Order', {
   id_pedido: {
     type: DataTypes.INTEGER,
@@ -13,7 +16,7 @@ const Order = sequelize.define('Order', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Client,
+      model: Client, // References the Client model
       key: 'id_cliente'
     },
     validate: {
@@ -44,7 +47,7 @@ const Order = sequelize.define('Order', {
   id_cupom: {
     type: DataTypes.INTEGER,
     allowNull: true
-    // Referência para o modelo Cupom quando for implementado
+    // Reference to the Coupon model when implemented
   },
   criado_em: {
     type: DataTypes.DATE,
@@ -57,11 +60,11 @@ const Order = sequelize.define('Order', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'order',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'order', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Order;

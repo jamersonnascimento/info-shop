@@ -1,8 +1,11 @@
+// This file defines the OrderItem model using Sequelize, which represents the 'order_item' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Order = require('./order.model');
 const Product = require('./product.model');
 
+// Define the OrderItem model
 const OrderItem = sequelize.define('OrderItem', {
   id_item_pedido: {
     type: DataTypes.INTEGER,
@@ -14,7 +17,7 @@ const OrderItem = sequelize.define('OrderItem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Order,
+      model: Order, // References the Order model
       key: 'id_pedido'
     },
     validate: {
@@ -26,7 +29,7 @@ const OrderItem = sequelize.define('OrderItem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product,
+      model: Product, // References the Product model
       key: 'id_produto'
     },
     validate: {
@@ -79,15 +82,15 @@ const OrderItem = sequelize.define('OrderItem', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'order_item',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true,
+  tableName: 'order_item', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true, // Uses snake_case for automatically added attributes
   indexes: [
     {
       unique: true,
-      fields: ['id_pedido', 'id_produto']
+      fields: ['id_pedido', 'id_produto'] // Ensures unique combination of order and product
     }
   ]
 });

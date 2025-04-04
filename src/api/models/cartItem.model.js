@@ -1,8 +1,11 @@
+// This file defines the CartItem model using Sequelize, which represents the 'cart_item' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Cart = require('./cart.model');
 const Product = require('./product.model');
 
+// Define the CartItem model
 const CartItem = sequelize.define('CartItem', {
   id_item: {
     type: DataTypes.INTEGER,
@@ -14,7 +17,7 @@ const CartItem = sequelize.define('CartItem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Cart,
+      model: Cart, // References the Cart model
       key: 'id_carrinho'
     },
     validate: {
@@ -26,7 +29,7 @@ const CartItem = sequelize.define('CartItem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product,
+      model: Product, // References the Product model
       key: 'id_produto'
     },
     validate: {
@@ -68,15 +71,15 @@ const CartItem = sequelize.define('CartItem', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'cart_item',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true,
+  tableName: 'cart_item', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true, // Uses snake_case for automatically added attributes
   indexes: [
     {
       unique: true,
-      fields: ['id_carrinho', 'id_produto']
+      fields: ['id_carrinho', 'id_produto'] // Ensures unique combination of cart and product
     }
   ]
 });

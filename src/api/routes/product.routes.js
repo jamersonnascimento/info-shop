@@ -2,17 +2,17 @@ module.exports = (app) => {
     const productController = require('../controllers/product.controller');
     const router = require('express').Router();
   
-    // Rotas para operações em massa
+    // Routes for bulk operations
     router.route('/')
-        .post(productController.create)    // Criar produto
-        .get(productController.findAll);   // Listar todos com paginação e filtros
+        .post(productController.create)    // Create product
+        .get(productController.findAll);   // List all with pagination and filters
   
-    // Rotas para operações específicas
+    // Routes for specific operations
     router.route('/:id')
-        .get(productController.findOne)    // Buscar por ID
-        .put(productController.update)     // Atualizar
-        .delete(productController.delete); // Deletar
+        .get(productController.findOne)    // Find by ID
+        .put(productController.update)     // Update
+        .delete(productController.delete); // Delete
   
-    // Prefixo base para todas as rotas de Produto
+    // Base prefix for all Product routes
     app.use('/api/products', router);
 };

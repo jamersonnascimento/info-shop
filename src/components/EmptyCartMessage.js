@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+// EmptyCartMessage component displays a message when the shopping cart is empty
 const EmptyCartMessage = ({ onExplore }) => {
   return (
     <View style={styles.container}>

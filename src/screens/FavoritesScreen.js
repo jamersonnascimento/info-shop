@@ -6,10 +6,11 @@ import ProductItem from '../components/ProductItem';
 import EmptyFavoritesMessage from '../components/EmptyFavoritesMessage';
 import BottomNavigation from '../components/BottomNavigation';
 
+// FavoritesScreen component displays the user's favorite products
 const FavoritesScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [favorites, setFavorites] = useState([]); // Inicialmente vazio
+  const [favorites, setFavorites] = useState([]); // Initially empty
 
   const handleLogoPress = () => {
     navigation.navigate('Home');
@@ -28,7 +29,7 @@ const FavoritesScreen = () => {
         <SearchBar value={searchText} onChangeText={setSearchText} />
       </View>
 
-      {/* Lista de Favoritos */}
+      {/* Favorites List */}
       {favorites.length === 0 ? (
         <EmptyFavoritesMessage />
       ) : (
@@ -37,7 +38,7 @@ const FavoritesScreen = () => {
             data={favorites}
             renderItem={({ item }) => <ProductItem item={item} />}
             keyExtractor={item => item.id}
-            contentContainerStyle={styles.flatListContent} // Adiciona espaçamento interno
+            contentContainerStyle={styles.flatListContent} // Adds internal spacing
           />
         </View>
       )}
@@ -51,14 +52,14 @@ const FavoritesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 0, // Mantém o padding 0 para o BottomNavigation ficar alinhado
-    backgroundColor: '#F6ECDA',
+    padding: 0, // Keeps padding 0 for BottomNavigation alignment
+    backgroundColor: '#F6ECDA', // Background color
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    paddingHorizontal: 2, // Adiciona espaçamento lateral para o header
+    paddingHorizontal: 2, // Adds lateral spacing to the header
   },
   logo: {
     width: 70,
@@ -72,10 +73,10 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    marginHorizontal: 16, // Adiciona margem lateral para o scrollContainer
+    marginHorizontal: 16, // Adds lateral margin to the scrollContainer
   },
   flatListContent: {
-    paddingVertical: 16, // Adiciona espaçamento interno vertical
+    paddingVertical: 16, // Adds internal vertical spacing
   },
 });
 

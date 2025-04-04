@@ -1,3 +1,6 @@
+// This file contains controller functions for managing clients in the application.
+// It includes operations such as creating, retrieving, updating, and deleting clients.
+
 const db = require('../models');
 const Client = db.Client;
 const Person = db.Person;
@@ -5,7 +8,7 @@ const Address = db.Address;
 const Cart = db.Cart; 
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for Client, Person, Address, and Cart
 const CLIENT_ATTRIBUTES = [
   'id_cliente',
   'id_pessoa',
@@ -38,19 +41,19 @@ const CART_ATTRIBUTES = [
   'criado_em'
 ];
 
-// Criar um novo Cliente
+// Create a new Client
 exports.create = async (req, res) => {
   try {
     const { id_pessoa, senha_hash } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_pessoa || !senha_hash) {
       return res.status(400).json({ 
         message: 'Os campos id_pessoa e senha_hash são obrigatórios.' 
       });
     }
 
-    // Verifica se a pessoa existe
+    // Check if the person exists
     const person = await Person.findByPk(id_pessoa);
     if (!person) {
       return res.status(404).json({ 
@@ -58,7 +61,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se a pessoa já é um cliente
+    // Check if the person is already a client
     const existingClient = await Client.findOne({
       where: { id_pessoa }
     });
@@ -69,13 +72,13 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Criação do Cliente
+    // Create the Client
     const client = await Client.create({ 
       id_pessoa, 
       senha_hash 
     });
 
-    // Busca o cliente com todos os dados da pessoa
+    // Retrieve the client with all person data
     const newClient = await Client.findByPk(client.id_cliente, {
       include: [{
         model: Person,
@@ -96,7 +99,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar todos os Clientes com paginação
+// Retrieve all Clients with pagination
 exports.findAll = async (req, res) => {
   try {
     const { page = 1, limit = 10, search = '' } = req.query;
@@ -137,7 +140,7 @@ exports.findAll = async (req, res) => {
       order: [['criado_em', 'DESC']]
     });
 
-    // Reorganiza os dados antes de enviar
+    // Reorganize the data before sending
     const formattedRows = rows.map(row => {
       const { personInfo, addresses, cart, ...clientData } = row;
       const { nome, cpf, email, telefone, data_nasc } = personInfo;
@@ -152,7 +155,7 @@ exports.findAll = async (req, res) => {
           data_nasc
         },
         addresses,
-        cart: cart || null // Garante que retorne null se não houver carrinho
+        cart: cart || null // Ensure null is returned if there is no cart
       };
     });
 
@@ -170,7 +173,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Buscar um Cliente pelo ID
+// Retrieve a Client by ID
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -203,7 +206,7 @@ exports.findOne = async (req, res) => {
 
     res.status(200).json(client);
   } catch (error) {
-    console.error('Erro detalhado:', error); // Log para debug
+    console.error('Erro detalhado:', error); // Log for debugging
     res.status(500).json({ 
       message: 'Erro ao buscar o cliente.', 
       error: error.message 
@@ -211,14 +214,13 @@ exports.findOne = async (req, res) => {
   }
 };
 
-
-// Atualizar um Cliente pelo ID
+// Update a Client by ID
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
     const { senha_hash, id_pessoa } = req.body;
 
-    // Verifica se está tentando atualizar id_pessoa
+    // Check if trying to update id_pessoa
     if (id_pessoa) {
       return res.status(400).json({ 
         message: 'Não é permitido alterar a associação do cliente com a pessoa.' 
@@ -232,7 +234,7 @@ exports.update = async (req, res) => {
       });
     }
 
-    // Atualiza apenas a senha
+    // Update only the password
     await client.update({ senha_hash });
 
     const updatedClient = await Client.findByPk(id, {
@@ -255,7 +257,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// Deletar um Cliente pelo ID
+// Delete a Client by ID
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -281,7 +283,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Deletar todos os Clientes (apenas em desenvolvimento)
+// Delete all Clients (development only)
 exports.deleteAll = async (req, res) => {
   if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ 

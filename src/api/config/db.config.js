@@ -1,8 +1,11 @@
+// This file configures the database connection using Sequelize ORM.
+// It reads environment variables to set up the connection for different environments (development and production).
+
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 const { Sequelize } = require('sequelize');
 
-// Validação das variáveis de ambiente necessárias
+// Define required environment variables for each environment
 const requiredEnvVars = {
   development: [
     'DB_DEV_USERNAME',
@@ -20,15 +23,17 @@ const requiredEnvVars = {
   ]
 };
 
+// Determine the current environment (default to development)
 const environment = process.env.NODE_ENV || "development";
 
-// Verifica se todas as variáveis de ambiente necessárias estão definidas
+// Check if all required environment variables are set
 for (const envVar of requiredEnvVars[environment]) {
   if (!process.env[envVar]) {
     throw new Error(`Variável de ambiente ${envVar} não definida`);
   }
 }
 
+// Database configuration for different environments
 const databaseConfig = {
   development: {
     username: process.env.DB_DEV_USERNAME,
@@ -69,8 +74,10 @@ const databaseConfig = {
   },
 };
 
+// Select the configuration based on the current environment
 const config = databaseConfig[environment];
 
+// Initialize Sequelize with the selected configuration
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: config.dialect,
@@ -87,12 +94,12 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
   define: {
     freezeTableName: true,
     timestamps: true,
-    underscored: true, // Usa snake_case para nomes de colunas
+    underscored: true, // Use snake_case for column names
   },
   timezone: 'America/Sao_Paulo'
 });
 
-// Função para tentar reconexão em caso de falha
+// Function to attempt reconnection in case of failure
 const maxRetries = 5;
 let retries = 0;
 
@@ -112,7 +119,7 @@ const connectWithRetry = async () => {
   }
 };
 
-// Inicia a conexão com retry
+// Start the connection with retry logic
 connectWithRetry();
 
 module.exports = sequelize;

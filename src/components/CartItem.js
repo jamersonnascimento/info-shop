@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between', // Ensures space is evenly distributed between items
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#fff',

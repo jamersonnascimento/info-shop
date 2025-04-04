@@ -8,6 +8,7 @@ import api from '../services/api';
 import { productsData, getProductsByCategory } from '../data/products';
 import { getProductImage } from '../utils/productImageMapper';
 
+// ProductsScreen component displays a list of products based on category
 const ProductsScreen = ({ route }) => {
   const { categoryName, categoryId } = route.params;
   const navigation = useNavigation();
@@ -24,7 +25,7 @@ const ProductsScreen = ({ route }) => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      // Função para formatar preços
+      // Function to format prices
       const formatarPreco = (preco) => {
         if (preco === undefined || preco === null) {
           return {
@@ -34,7 +35,7 @@ const ProductsScreen = ({ route }) => {
           };
         }
         
-        // Converter para número se for string
+        // Convert to number if it's a string
         const precoNumerico = typeof preco === 'string' ? 
           parseFloat(preco.replace(',', '.')) : 
           Number(preco);
@@ -57,9 +58,9 @@ const ProductsScreen = ({ route }) => {
       const response = await api.get(`/categories/${categoryId}/products`);
       const productsData = response.data.products.map(product => {
         const productId = product.id_produto.toString();
-        // Formatar preços
+        // Format prices
         const precos = formatarPreco(product.preco);
-        // Imagem padrão para produtos
+        // Default image for products
         const defaultImage = 'https://via.placeholder.com/150?text=Produto+' + encodeURIComponent(product.nome || 'Sem+Nome');
         
         return {
@@ -81,7 +82,7 @@ const ProductsScreen = ({ route }) => {
       console.error('Erro ao buscar produtos:', err);
       setError('Não foi possível carregar os produtos da API. Usando dados locais.');
       
-      // Usar os dados locais de produtos filtrados por categoria como fallback
+      // Use local product data filtered by category as fallback
       const localProducts = getProductsByCategory(categoryName) || productsData;
       setProducts(localProducts);
       setFilteredProducts(localProducts);
@@ -171,10 +172,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 8,
     overflow: 'hidden',
-    maxHeight: 567,
+    maxHeight: 567, // Maximum height for the scroll container
     backgroundColor: '#F6ECDA',
     marginHorizontal: 3,
-    marginBottom: 60, // Adiciona margem inferior para evitar que o conteúdo fique atrás do BottomNavigation
+    marginBottom: 60, // Adds bottom margin to prevent content from being behind BottomNavigation
   },
   noResults: {
     textAlign: 'center',
@@ -217,8 +218,8 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingVertical: 10,
-    paddingBottom: 50, // Garante espaço suficiente na parte inferior para não ficar atrás do BottomNavigation
-    backgroundColor: '#F6ECDA', // Cor de fundo da FlatList
+    paddingBottom: 50, // Ensures enough space at the bottom to not be behind BottomNavigation
+    backgroundColor: '#F6ECDA', // Background color for FlatList
   },
 });
 

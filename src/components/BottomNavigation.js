@@ -3,27 +3,33 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
+// BottomNavigation component provides a navigation bar at the bottom of the screen
 const BottomNavigation = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.navigationContainer}>
+      {/* Navigation button for Home */}
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
         <Icon name="home" size={24} color="white" />
         <Text style={styles.navText}>Home</Text>
       </TouchableOpacity>
+      {/* Navigation button for Categories */}
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Categories')}>
         <Icon name="th-list" size={24} color="white" />
         <Text style={styles.navText}>Categorias</Text>
       </TouchableOpacity>
+      {/* Navigation button for Favorites */}
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Favorites')}>
         <Icon name="heart" size={24} color="white" />
         <Text style={styles.navText}>Favoritos</Text>
       </TouchableOpacity>
+      {/* Navigation button for Cart */}
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Cart')}>
         <Icon name="shopping-cart" size={24} color="white" />
         <Text style={styles.navText}>Carrinho</Text>
       </TouchableOpacity>
+      {/* Navigation button for Account */}
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Account')}>
         <Icon name="user" size={24} color="white" />
         <Text style={styles.navText}>Minha Conta</Text>
@@ -32,6 +38,7 @@ const BottomNavigation = () => {
   );
 };
 
+// Styles for the BottomNavigation component
 const styles = StyleSheet.create({
   navigationContainer: {
     flexDirection: 'row',

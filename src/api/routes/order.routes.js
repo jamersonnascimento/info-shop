@@ -2,25 +2,25 @@ module.exports = (app) => {
   const orderController = require('../controllers/order.controller');
   const router = require('express').Router();
 
-  // Rotas para operações em massa
+  // Routes for bulk operations
   router.route('/')
-    .post(orderController.create)    // Criar pedido
-    .get(orderController.findAll);   // Listar todos com paginação
+    .post(orderController.create)    // Create order
+    .get(orderController.findAll);   // List all with pagination
 
-  // Rota para criar pedido a partir de carrinho
+  // Route to create order from cart
   router.route('/from-cart')
-    .post(orderController.createFromCart); // Criar pedido a partir de carrinho
+    .post(orderController.createFromCart); // Create order from cart
 
-  // Rotas para operações específicas
+  // Routes for specific operations
   router.route('/:id')
-    .get(orderController.findOne)       // Buscar por ID
-    .patch(orderController.updateStatus) // Atualizar status
-    .delete(orderController.delete);    // Deletar
+    .get(orderController.findOne)       // Find by ID
+    .patch(orderController.updateStatus) // Update status
+    .delete(orderController.delete);    // Delete
 
-  // Rotas para listar pedidos de um cliente específico
+  // Routes to list orders of a specific client
   router.route('/client/:id_cliente')
-    .get(orderController.findAllByClient); // Listar pedidos de um cliente
+    .get(orderController.findAllByClient); // List orders of a client
 
-  // Prefixo base para todas as rotas de Pedido
+  // Base prefix for all Order routes
   app.use('/api/orders', router);
 };

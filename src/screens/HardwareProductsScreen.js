@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from '../components/BottomNavigation';
 import { CartContext } from '../context/CartContext';
 
+// HardwareProductsScreen component displays a list of hardware products
 const HardwareProductsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { categoryName } = route.params;
@@ -34,7 +35,7 @@ const HardwareProductsScreen = ({ route }) => {
   };
 
   const handlePurchase = () => {
-    // Um alerta para o botão addToCart
+    // Alert for the addToCart button
     alert("Produto adicionado ao carrinho!");
   };
 
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButton: {
-    backgroundColor: '#228B22', // Cor verde
+    backgroundColor: '#228B22', // Green color
     paddingVertical: 10,
     borderRadius: 8,
     marginTop: 10,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   contentContainer: {
-    paddingBottom: 80, // Aumentado para dar espaço ao BottomNavigation
+    paddingBottom: 80, // Increased to give space to BottomNavigation
   },
 });
 

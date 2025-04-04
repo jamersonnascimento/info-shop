@@ -1,10 +1,13 @@
+// This file contains controller functions for managing cart items in the application.
+// It includes operations such as creating, retrieving, updating, and deleting cart items.
+
 const db = require('../models');
 const CartItem = db.CartItem;
 const Cart = db.Cart;
 const Product = db.Product;
 const { Op } = require('sequelize');
 
-// Constantes para definir ordem dos atributos
+// Constants to define the order of attributes for CartItem and Product
 const CARTITEM_ATTRIBUTES = [
   'id_item',
   'id_carrinho',
@@ -23,12 +26,12 @@ const PRODUCT_ATTRIBUTES = [
   'estoque'
 ];
 
-// Criar um novo Item no Carrinho
+// Create a new Item in the Cart
 exports.create = async (req, res) => {
   try {
     const { id_carrinho, id_produto, quantidade, preco_unit } = req.body;
 
-    // Validações detalhadas
+    // Validate required fields
     if (!id_carrinho) {
       return res.status(400).json({ 
         message: 'ID do carrinho é obrigatório.' 
@@ -41,7 +44,7 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho existe
+    // Check if the cart exists
     const cart = await Cart.findByPk(id_carrinho);
     if (!cart) {
       return res.status(404).json({ 
@@ -49,14 +52,14 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está ativo
+    // Check if the cart is active
     if (cart.status !== 'ativo') {
       return res.status(403).json({ 
         message: `Não é possível adicionar itens a um carrinho ${cart.status}.` 
       });
     }
 
-    // Verifica se o produto existe
+    // Check if the product exists
     const product = await Product.findByPk(id_produto);
     if (!product) {
       return res.status(404).json({ 
@@ -64,14 +67,14 @@ exports.create = async (req, res) => {
       });
     }
 
-    // Verifica se o produto tem estoque suficiente
+    // Check if the product has sufficient stock
     if (product.estoque < quantidade) {
       return res.status(400).json({ 
         message: 'Quantidade solicitada indisponível em estoque.' 
       });
     }
 
-    // Verifica se o item já existe no carrinho
+    // Check if the item already exists in the cart
     const existingItem = await CartItem.findOne({
       where: { 
         id_carrinho,
@@ -82,10 +85,10 @@ exports.create = async (req, res) => {
     let cartItem;
     
     if (existingItem) {
-      // Atualiza a quantidade se o item já existir
+      // Update the quantity if the item already exists
       const newQuantity = existingItem.quantidade + quantidade;
       
-      // Verifica novamente o estoque para a nova quantidade
+      // Check stock again for the new quantity
       if (product.estoque < newQuantity) {
         return res.status(400).json({ 
           message: 'Quantidade solicitada indisponível em estoque.' 
@@ -94,7 +97,7 @@ exports.create = async (req, res) => {
       
       cartItem = await existingItem.update({ 
         quantidade: newQuantity,
-        // Atualiza o preço unitário se fornecido, senão mantém o atual
+        // Update the unit price if provided, otherwise keep the current
         preco_unit: preco_unit || existingItem.preco_unit
       });
       
@@ -103,7 +106,7 @@ exports.create = async (req, res) => {
         data: cartItem
       });
     } else {
-      // Cria um novo item no carrinho
+      // Create a new item in the cart
       cartItem = await CartItem.create({ 
         id_carrinho,
         id_produto,
@@ -111,7 +114,7 @@ exports.create = async (req, res) => {
         preco_unit: preco_unit || product.preco
       });
       
-      // Busca o item criado com todas as relações
+      // Retrieve the created item with all relations
       const createdItem = await CartItem.findByPk(cartItem.id_item, {
         include: [{
           model: Product,
@@ -133,7 +136,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar um Item específico
+// Retrieve a specific Item
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -161,12 +164,12 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Buscar todos os Itens de um Carrinho
+// Retrieve all Items from a Cart
 exports.findAllByCart = async (req, res) => {
   try {
     const { id_carrinho } = req.params;
     
-    // Verifica se o carrinho existe
+    // Check if the cart exists
     const cart = await Cart.findByPk(id_carrinho);
     if (!cart) {
       return res.status(404).json({ 
@@ -197,7 +200,7 @@ exports.findAllByCart = async (req, res) => {
   }
 };
 
-// Buscar todos os Itens com paginação
+// Retrieve all Items with pagination
 exports.findAll = async (req, res) => {
   try {
     const { 
@@ -234,7 +237,7 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Atualizar quantidade de um Item
+// Update quantity of an Item
 exports.updateQuantity = async (req, res) => {
   try {
     const { id } = req.params;
@@ -259,7 +262,7 @@ exports.updateQuantity = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está ativo
+    // Check if the cart is active
     const cart = await Cart.findByPk(cartItem.id_carrinho);
     if (cart.status !== 'ativo') {
       return res.status(403).json({ 
@@ -267,7 +270,7 @@ exports.updateQuantity = async (req, res) => {
       });
     }
 
-    // Verifica se o produto tem estoque suficiente
+    // Check if the product has sufficient stock
     if (cartItem.product.estoque < quantidade) {
       return res.status(400).json({ 
         message: 'Quantidade solicitada indisponível em estoque.' 
@@ -296,7 +299,7 @@ exports.updateQuantity = async (req, res) => {
   }
 };
 
-// Deletar um Item do Carrinho
+// Delete an Item from the Cart
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -308,7 +311,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está ativo
+    // Check if the cart is active
     const cart = await Cart.findByPk(cartItem.id_carrinho);
     if (cart.status !== 'ativo') {
       return res.status(403).json({ 
@@ -330,12 +333,12 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Deletar todos os Itens de um Carrinho
+// Delete all Items from a Cart
 exports.deleteAllByCart = async (req, res) => {
   try {
     const { id_carrinho } = req.params;
 
-    // Verifica se o carrinho existe
+    // Check if the cart exists
     const cart = await Cart.findByPk(id_carrinho);
     if (!cart) {
       return res.status(404).json({ 
@@ -343,7 +346,7 @@ exports.deleteAllByCart = async (req, res) => {
       });
     }
 
-    // Verifica se o carrinho está ativo
+    // Check if the cart is active
     if (cart.status !== 'ativo') {
       return res.status(403).json({ 
         message: `Não é possível remover itens de um carrinho ${cart.status}.` 

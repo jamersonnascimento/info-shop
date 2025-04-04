@@ -1,8 +1,9 @@
-//index.js
+// This file sets up the database connection and defines the relationships between models using Sequelize.
+
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db.config');
 
-// Importação dos modelos
+// Import models
 const Person = require('./person.model');
 const Client = require('./client.model');
 const Address = require('./address.model');
@@ -16,11 +17,11 @@ const Payment = require('./payment.model');
 
 const db = {};
 
-// Configuração básica
+// Basic configuration
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Registro dos modelos
+// Register models
 db.Person = Person;
 db.Client = Client;
 db.Address = Address;
@@ -32,7 +33,9 @@ db.Order = Order;
 db.OrderItem = OrderItem;
 db.Payment = Payment;
 
-// Relacionamentos Person-Client (1:1)
+// Define relationships between models
+
+// Person-Client (1:1)
 db.Person.hasOne(db.Client, {
   foreignKey: {
     name: 'id_pessoa',
@@ -63,7 +66,7 @@ db.Client.belongsTo(db.Person, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Client-Address (1:N)
+// Client-Address (1:N)
 db.Client.hasMany(db.Address, {
   foreignKey: {
     name: 'id_cliente',
@@ -92,7 +95,7 @@ db.Address.belongsTo(db.Client, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Client-Cart (1:1)
+// Client-Cart (1:1)
 db.Client.hasOne(db.Cart, {
   foreignKey: {
     name: 'id_cliente',
@@ -123,7 +126,7 @@ db.Cart.belongsTo(db.Client, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Product-CartItem (1:N)
+// Product-CartItem (1:N)
 db.Product.hasMany(db.CartItem, {
   foreignKey: {
     name: 'id_produto',
@@ -134,7 +137,7 @@ db.Product.hasMany(db.CartItem, {
     }
   },
   as: 'cartItems',
-  onDelete: 'RESTRICT', // Impede deleção de produto com itens em carrinhos
+  onDelete: 'RESTRICT', // Prevents deletion of products with items in carts
   onUpdate: 'CASCADE'
 });
 
@@ -152,7 +155,7 @@ db.CartItem.belongsTo(db.Product, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Category-Product (N:M)
+// Category-Product (N:M)
 db.Category.belongsToMany(db.Product, {
   through: 'ProductCategory',
   foreignKey: {
@@ -185,7 +188,7 @@ db.Product.belongsToMany(db.Category, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Client-Order (1:N)
+// Client-Order (1:N)
 db.Client.hasMany(db.Order, {
   foreignKey: {
     name: 'id_cliente',
@@ -214,7 +217,7 @@ db.Order.belongsTo(db.Client, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Order-OrderItem (1:N)
+// Order-OrderItem (1:N)
 db.Order.hasMany(db.OrderItem, {
   foreignKey: {
     name: 'id_pedido',
@@ -243,7 +246,7 @@ db.OrderItem.belongsTo(db.Order, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Order-Payment (1:1)
+// Order-Payment (1:1)
 db.Order.hasOne(db.Payment, {
   foreignKey: {
     name: 'id_pedido',
@@ -274,7 +277,7 @@ db.Payment.belongsTo(db.Order, {
   onUpdate: 'CASCADE'
 });
 
-// Relacionamentos Product-OrderItem (1:N)
+// Product-OrderItem (1:N)
 db.Product.hasMany(db.OrderItem, {
   foreignKey: {
     name: 'id_produto',
@@ -303,7 +306,7 @@ db.OrderItem.belongsTo(db.Product, {
   onUpdate: 'CASCADE'
 });
 
-// Sincronização com o banco (apenas em desenvolvimento)
+// Synchronize with the database (development only)
 if (process.env.NODE_ENV === 'development') {
   db.sequelize.sync({ alter: true })
     .then(() => {
@@ -312,7 +315,7 @@ if (process.env.NODE_ENV === 'development') {
     })
     .catch(err => {
       console.error('❌ Erro ao sincronizar models:', err);
-      process.exit(1); // Encerra a aplicação em caso de erro crítico
+      process.exit(1); // Terminates the application in case of a critical error
     });
 }
 

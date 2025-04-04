@@ -6,6 +6,7 @@ import CategoryItem from '../components/CategoryItem';
 import BottomNavigation from '../components/BottomNavigation';
 import api from '../services/api';
 
+// CategoriesScreen component displays a list of product categories
 const CategoriesScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
@@ -17,6 +18,7 @@ const CategoriesScreen = () => {
     fetchCategories();
   }, []);
 
+  // Fetch categories from the API
   const fetchCategories = async () => {
     try {
       setLoading(true);
@@ -31,6 +33,7 @@ const CategoriesScreen = () => {
     }
   };
 
+  // Handle category press to navigate to ProductsScreen
   const handleCategoryPress = (category) => {
     const categoryName = category.nome;
     const categoryId = category.id_categoria;
@@ -39,6 +42,7 @@ const CategoriesScreen = () => {
     navigation.navigate('ProductsScreen', { categoryName, categoryId })
   };
 
+  // Handle logo press to navigate to Home
   const handleLogoPress = () => {
     navigation.navigate('Home');
   };
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   flatListContent: {
-    paddingVertical: 1,
+    paddingVertical: 1, // Adds vertical padding to the FlatList content
   },
   loadingContainer: {
     flex: 1,

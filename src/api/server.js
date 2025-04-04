@@ -1,13 +1,13 @@
-//server.js
+// server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./models');
 
-// Inicializa o aplicativo Express
+// Initialize the Express application
 const app = express();
 
-// Configurações do CORS
+// CORS configuration
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || 'http://localhost:8080',
   optionsSuccessStatus: 200
@@ -33,10 +33,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(express.urlencoded({ extended: true }));
 
-// Rota inicial para testar a API
+// Initial route to test the API
 app.get('/', (req, res) => {
   res.json({
     message: 'Bem-vindo à API Computer Shop! 🚀',
@@ -45,7 +44,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Rotas
+// Routes
 require('./routes/client.routes')(app);
 require('./routes/person.routes')(app);
 require('./routes/address.routes')(app);
@@ -57,11 +56,11 @@ require('./routes/order.routes')(app);
 require('./routes/orderItem.routes')(app);
 require('./routes/payment.routes')(app);
 
-// Configurações
+// Configuration
 const PORT = process.env.API_PORT || 8080;
 const HOST = process.env.API_HOST || 'localhost';
 
-// Sincronização do banco de dados e inicialização do servidor
+// Database synchronization and server initialization
 db.sequelize
   .sync({ force: false })
   .then(() => {
@@ -75,7 +74,7 @@ db.sequelize
     process.exit(1);
   });
 
-// Tratamento de erros não capturados
+// Handling uncaught errors
 process.on('unhandledRejection', (err) => {
   console.error('❌ Erro não tratado:', err);
   process.exit(1);

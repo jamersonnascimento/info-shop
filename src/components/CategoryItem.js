@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// CategoryItem component displays a category with its name and optional description
 const CategoryItem = ({ item }) => {
   return (
     <View style={styles.categoryItem}>

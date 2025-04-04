@@ -3,17 +3,18 @@ import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Linking } 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomNavigation from '../components/BottomNavigation';
 
+// CustomerServiceScreen component provides options for customer support
 const CustomerServiceScreen = ({ navigation }) => {
   const handleChatSupport = () => {
-    // Navegar para a tela de suporte via chat
+    // Navigate to chat support screen
   };
 
   const handlePhoneSupport = () => {
-    // Ligar para o suporte
+    // Call phone support
   };
 
   const handleEmailSupport = () => {
-    // Enviar email para o suporte
+    // Send email to support
   };
 
   const handleWhatsAppSupport = () => {
@@ -24,21 +25,21 @@ const CustomerServiceScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {/* Imagem de Atendimento */}
+        {/* Customer Service Image */}
         <Image
           source={{ uri: 'https://your-image-url.com/customer-service.png' }}
           style={styles.image}
         />
 
-        {/* Título */}
+        {/* Title */}
         <Text style={styles.title}>Atendimento ao Cliente</Text>
 
-        {/* Descrição */}
+        {/* Description */}
         <Text style={styles.description}>
           Estamos aqui para ajudar! Escolha uma das opções abaixo para entrar em contato conosco.
         </Text>
 
-        {/* Botões de Atendimento */}
+        {/* Support Buttons */}
         <TouchableOpacity style={styles.button} onPress={handleChatSupport}>
           <Icon name="comments" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Suporte via Chat</Text>

@@ -1,6 +1,9 @@
+// This file defines the Category model using Sequelize, which represents the 'category' table in the database.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 
+// Define the Category model
 const Category = sequelize.define('Category', {
   id_categoria: {
     type: DataTypes.INTEGER,
@@ -34,11 +37,11 @@ const Category = sequelize.define('Category', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'category',
-  timestamps: true,
-  createdAt: 'criado_em',
-  updatedAt: 'atualizado_em',
-  underscored: true
+  tableName: 'category', // Specifies the table name
+  timestamps: true, // Enables automatic timestamp fields
+  createdAt: 'criado_em', // Maps the createdAt field to 'criado_em'
+  updatedAt: 'atualizado_em', // Maps the updatedAt field to 'atualizado_em'
+  underscored: true // Uses snake_case for automatically added attributes
 });
 
 module.exports = Category;
