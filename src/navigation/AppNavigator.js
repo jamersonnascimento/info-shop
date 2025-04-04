@@ -16,7 +16,6 @@ import ProductDetailScreen from '../screens/ProductDetailScreen';
 
 const Stack = createStackNavigator();
 
-// AppNavigator component sets up the navigation stack for the application
 const AppNavigator = () => {
   return (
     <NavigationContainer>
@@ -25,7 +24,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="Account" component={AccountScreen} /> // Screen for user account management
+        <Stack.Screen name="Account" component={AccountScreen} />
         <Stack.Screen name="HardwareProducts" component={HardwareProductsScreen} /> 
         <Stack.Screen name="PeripheralsAccessories" component={PeripheralsAccessoriesScreen} /> 
         <Stack.Screen name="PCsDesktopGamer" component={PCsDesktopGamerScreen} /> 
