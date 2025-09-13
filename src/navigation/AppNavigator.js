@@ -25,14 +25,14 @@ const AppNavigator = () => {
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="Account" component={AccountScreen} /> // Screen for user account management
-        <Stack.Screen name="HardwareProducts" component={HardwareProductsScreen} /> 
-        <Stack.Screen name="PeripheralsAccessories" component={PeripheralsAccessoriesScreen} /> 
-        <Stack.Screen name="PCsDesktopGamer" component={PCsDesktopGamerScreen} /> 
-        <Stack.Screen name="OrderSummary" component={OrderSummaryScreen} /> 
-        <Stack.Screen name="CustomerService" component={CustomerServiceScreen} /> 
-        <Stack.Screen name="ProductsScreen" component={ProductsScreen} /> 
-        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} /> 
+        <Stack.Screen name="Account" component={AccountScreen} />
+        <Stack.Screen name="HardwareProducts" component={HardwareProductsScreen} />
+        <Stack.Screen name="PeripheralsAccessories" component={PeripheralsAccessoriesScreen} />
+        <Stack.Screen name="PCsDesktopGamer" component={PCsDesktopGamerScreen} />
+        <Stack.Screen name="OrderSummary" component={OrderSummaryScreen} />
+        <Stack.Screen name="CustomerService" component={CustomerServiceScreen} />
+        <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

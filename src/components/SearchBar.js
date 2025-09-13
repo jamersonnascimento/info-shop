@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingLeft: 8,
+    backgroundColor: 'white',  // Light gray background
+    borderRadius: 10,  // Rounds the corners
+    color: 'black',  // Text color
   },
 });
 

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // Obtenha o IP da sua máquina na rede local (exemplo: 192.168.1.149)
 // Este é o mesmo IP que aparece no QR code do Expo
-const API_IP = '192.168.1.149'; // Substitua pelo IP da sua máquina na rede
+const API_IP = '192.168.0.7'; // Substitua pelo IP da sua máquina na rede
 const API_PORT = '8080';
 const BASE_URL = `http://${API_IP}:${API_PORT}/api`;
 
